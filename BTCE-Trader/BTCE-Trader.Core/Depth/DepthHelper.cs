@@ -18,9 +18,9 @@ namespace BTCE_Trader.Core.Depth
                 var interval = new OrderInfo
                     {
                         Amount = fullOrderList.FindAll(a => a.Price >= counter && a.Price < counter + increment).Sum(b => b.Amount),
-                        Price = lowestValue
+                        Price = counter
                     };
-                
+
                 toReturn.Add(interval);
                 counter += increment;
             }

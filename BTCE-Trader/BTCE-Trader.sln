@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtceApi", "BtceApi\BtceApi.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTCE-Trader.Core", "BTCE-Trader.Core\BTCE-Trader.Core.csproj", "{EDD98438-96A8-447A-A816-4CA42DF48B19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTCE-Trader.Tests", "BTCE-Trader.Tests\BTCE-Trader.Tests.csproj", "{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,12 @@ Global
 		{EDD98438-96A8-447A-A816-4CA42DF48B19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDD98438-96A8-447A-A816-4CA42DF48B19}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDD98438-96A8-447A-A816-4CA42DF48B19}.Release|X64.ActiveCfg = Release|Any CPU
+		{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}.Debug|X64.ActiveCfg = Debug|Any CPU
+		{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D149AAA-9B0F-41E5-ABD1-CD5AC9098C39}.Release|X64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
