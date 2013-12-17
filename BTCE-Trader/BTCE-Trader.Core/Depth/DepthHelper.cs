@@ -7,17 +7,19 @@ namespace BTCE_Trader.Core.Depth
 {
     public class DepthHelper
     {
-        public static List<OrderInfo> GetAggregatedOrderList(List<OrderInfo> fullOrderList, decimal increment)
+        public static List<OrderInfo> GetAggregatedAskOrderList(List<OrderInfo> fullOrderList, decimal increment)
         {
             var toReturn = new List<OrderInfo>();
+            decimal lowestValue = Math.Round(fullOrderList.OrderBy(a => a.Price).First().Price, 4);
 
-            decimal lowestValue = Math.Floor(fullOrderList.OrderBy(a => a.Price).First().Price);
             decimal counter = lowestValue;
-            while (counter < lowestValue + 15)
+            decimal amountSum = 0;
+            while (counter < lowestValue + (15 * increment))
             {
+                amountSum += fullOrderList.FindAll(a => a.Price >= counter && a.Price < counter + increment).Sum(b => b.Amount);
                 var interval = new OrderInfo
                     {
-                        Amount = fullOrderList.FindAll(a => a.Price >= counter && a.Price < counter + increment).Sum(b => b.Amount),
+                        Amount = Math.Round(amountSum),
                         Price = counter
                     };
 
@@ -25,6 +27,29 @@ namespace BTCE_Trader.Core.Depth
                 counter += increment;
             }
             
+            return toReturn;
+        }
+
+        public static List<OrderInfo> GetAggregatedBidOrderList(List<OrderInfo> fullOrderList, decimal increment)
+        {
+            var toReturn = new List<OrderInfo>();
+            decimal highestValue = Math.Round(fullOrderList.OrderByDescending(a => a.Price).First().Price, 4);
+
+            decimal counter = highestValue;
+            decimal amountSum = 0;
+            while (counter > highestValue - (15 * increment))
+            {
+                amountSum += fullOrderList.FindAll(a => a.Price >= counter && a.Price < counter + increment).Sum(b => b.Amount);
+                var interval = new OrderInfo
+                {
+                    Amount = Math.Round(amountSum),
+                    Price = counter
+                };
+
+                toReturn.Add(interval);
+                counter -= increment;
+            }
+
             return toReturn;
         }
 

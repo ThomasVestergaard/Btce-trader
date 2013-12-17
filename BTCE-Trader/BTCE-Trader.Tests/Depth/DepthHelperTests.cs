@@ -24,7 +24,7 @@ namespace BTCE_Trader.Tests.Depth
             fullList.Add(new OrderInfo { Price = 13.99999m, Amount = 3 });
             fullList.Add(new OrderInfo { Price = 13.79m, Amount = 0.5m });
 
-            var aggregatedList = DepthHelper.GetAggregatedOrderList(fullList, 0.5m);
+            var aggregatedList = DepthHelper.GetAggregatedAskOrderList(fullList, 0.5m);
 
             Assert.AreEqual(1, aggregatedList.Find(a => a.Price == 12).Amount);
             Assert.AreEqual(1, aggregatedList.Find(a => a.Price == 12.5m).Amount);

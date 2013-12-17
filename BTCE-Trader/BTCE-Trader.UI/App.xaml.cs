@@ -25,7 +25,7 @@ namespace BTCE_Trader.UI
             pairs.Add(BtcePair.btc_usd);
             pairs.Add(BtcePair.ltc_usd);
 
-            dependencyInjection.Container.Resolve<IDepthUpdater>().Start(1500, pairs);
+            dependencyInjection.Container.Resolve<IDepthUpdater>().Start(500, pairs);
             Dispatcher.Invoke(Start);
         }
 

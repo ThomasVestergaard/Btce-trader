@@ -36,6 +36,15 @@ namespace BTCE_Trader.UI.UI
             get { return aggregatedBids; }
         }
 
+        private decimal spread { get; set; }
+        public string Spread
+        {
+            get
+            {
+                return string.Format("Spread: {0}", spread);
+            }
+        }
+
 
         public DepthWindowViewModel(IDepthUpdater depthUpdater)
         {
@@ -56,15 +65,18 @@ namespace BTCE_Trader.UI.UI
             var depth = pairDepthPairs[BtcePair.ltc_btc];
 
             asks = depth.Asks.OrderBy(a => a.Price).Take(10).OrderByDescending(a => a.Price).ToList();
-            bids = depth.Bids.OrderBy(a => a.Price).Take(10).ToList();
+            bids = depth.Bids.OrderByDescending(a => a.Price).Take(10).ToList();
 
-            aggregatedAsks = DepthHelper.GetAggregatedOrderList(depth.Asks, 1).OrderByDescending(a => a.Price).ToList();
-            aggregatedBids = DepthHelper.GetAggregatedOrderList(depth.Bids, 1).OrderBy(a => a.Price).ToList();
+            aggregatedAsks = DepthHelper.GetAggregatedAskOrderList(depth.Asks, 0.0001m).OrderByDescending(a => a.Price).ToList();
+            aggregatedBids = DepthHelper.GetAggregatedBidOrderList(depth.Bids, 0.0001m).OrderByDescending(a => a.Price).ToList();
+
+            spread = asks[asks.Count - 1].Price - bids[0].Price;
 
             OnPropertyChanged("Bids");
             OnPropertyChanged("Asks");
             OnPropertyChanged("AggregatedAsks");
             OnPropertyChanged("AggregatedBids");
+            OnPropertyChanged("Spread");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
