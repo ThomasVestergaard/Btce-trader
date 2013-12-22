@@ -11,7 +11,7 @@ namespace BTCE_Trader.UI.UI
 {
     public class DepthWindowViewModel : INotifyPropertyChanged
     {
-        private readonly IDepthUpdater depthUpdater;
+        private readonly IDepthAgent depthUpdater;
         private List<OrderInfo> asks;
         private List<OrderInfo> bids;
 
@@ -46,7 +46,7 @@ namespace BTCE_Trader.UI.UI
         }
 
 
-        public DepthWindowViewModel(IDepthUpdater depthUpdater)
+        public DepthWindowViewModel(IDepthAgent depthUpdater)
         {
             asks = new List<OrderInfo>();
             bids = new List<OrderInfo>();

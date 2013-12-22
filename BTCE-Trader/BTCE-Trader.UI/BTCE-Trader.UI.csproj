@@ -41,6 +41,7 @@
       <HintPath>..\ThirdParty\Castle.Windsor.3.2.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -110,6 +111,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BTCE-Trader.Api\BTCE-Trader.Api.csproj">
+      <Project>{04a3675f-0690-4ba4-96b2-a7b5007ce908}</Project>
+      <Name>BTCE-Trader.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BTCE-Trader.Core\BTCE-Trader.Core.csproj">
       <Project>{edd98438-96a8-447a-a816-4ca42df48b19}</Project>
       <Name>BTCE-Trader.Core</Name>

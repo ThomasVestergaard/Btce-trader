@@ -4,6 +4,7 @@ using BTCE_Trader.UI.Commons;
 using BTCE_Trader.UI.UI;
 using BtcE;
 using System.Collections.Generic;
+using BTCE_Trader.Core.Orders;
 
 namespace BTCE_Trader.UI
 {
@@ -25,7 +26,8 @@ namespace BTCE_Trader.UI
             pairs.Add(BtcePair.btc_usd);
             pairs.Add(BtcePair.ltc_usd);
 
-            dependencyInjection.Container.Resolve<IDepthUpdater>().Start(500, pairs);
+            dependencyInjection.Container.Resolve<IDepthAgent>().Start(500, pairs);
+            dependencyInjection.Container.Resolve<IActiveOrderAgent>().Start(500);
             Dispatcher.Invoke(Start);
         }
 
@@ -38,8 +40,8 @@ namespace BTCE_Trader.UI
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            dependencyInjection.Container.Resolve<IDepthUpdater>().Stop();
-
+            dependencyInjection.Container.Resolve<IDepthAgent>().Stop();
+            dependencyInjection.Container.Resolve<IActiveOrderAgent>().Stop();
         }
     }
 }

@@ -143,6 +143,19 @@ namespace BtcE
             return OrderList.ReadFromJObject(result["return"] as JObject);
         }
 
+        public OrderList GetActiveOrderList()
+        {
+            var args = new Dictionary<string, string>()
+            {
+                { "method", "ActiveOrders" }
+            };
+            
+            var result = JObject.Parse(Query(args));
+            if (result.Value<int>("success") == 0)
+                throw new Exception(result.Value<string>("error"));
+            return OrderList.ReadFromJObject(result["return"] as JObject);
+        }
+
         public TradeAnswer Trade(BtcePair pair, TradeType type, decimal rate, decimal amount)
         {
             var args = new Dictionary<string, string>()
@@ -193,7 +206,8 @@ namespace BtcE
             var reqStream = request.GetRequestStream();
             reqStream.Write(data, 0, data.Length);
             reqStream.Close();
-            return new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();
+            string toReturn = new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();;
+            return toReturn;
         }
         static string ByteArrayToString(byte[] ba)
         {

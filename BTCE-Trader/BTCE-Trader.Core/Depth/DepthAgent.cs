@@ -5,7 +5,7 @@ using System;
 
 namespace BTCE_Trader.Core.Depth
 {
-    public class DepthUpdater : IDepthUpdater
+    public class DepthAgent : IDepthAgent
     {
         public delegate void DepthUpdatedDelegate(Dictionary<BtcePair, BtcE.Depth> pairDepthPairs);
         public event DepthUpdatedDelegate DepthUpdated;

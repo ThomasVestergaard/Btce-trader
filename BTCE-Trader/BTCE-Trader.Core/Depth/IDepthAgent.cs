@@ -3,10 +3,10 @@ using BtcE;
 
 namespace BTCE_Trader.Core.Depth
 {
-    public interface IDepthUpdater
+    public interface IDepthAgent
     {
         void Start(int updateInterval, List<BtcePair> pairs);
         void Stop();
-        event DepthUpdater.DepthUpdatedDelegate DepthUpdated;
+        event DepthAgent.DepthUpdatedDelegate DepthUpdated;
     }
 }

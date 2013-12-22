@@ -45,16 +45,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Depth\DepthHelper.cs" />
-    <Compile Include="Depth\DepthUpdater.cs" />
-    <Compile Include="Depth\IDepthUpdater.cs" />
+    <Compile Include="Depth\DepthAgent.cs" />
+    <Compile Include="Depth\IDepthAgent.cs" />
+    <Compile Include="Orders\IActiveOrderAgent.cs" />
+    <Compile Include="Orders\ActiveOrderAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BTCE-Trader.Api\BTCE-Trader.Api.csproj">
+      <Project>{04a3675f-0690-4ba4-96b2-a7b5007ce908}</Project>
+      <Name>BTCE-Trader.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BtceApi\BtceApi.csproj">
       <Project>{266935b5-b5b2-462c-8308-20e2bd1360b5}</Project>
       <Name>BtceApi</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
