@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.Time;
 using BTCE_Trader.Api.Web;
@@ -14,7 +15,6 @@ namespace BTCE_Trader.Api
     {
         public BtceTradeApi(IWebRequestWrapper webRequest) : base(webRequest)
         {
-
         }
 
         public List<IOrder> GetActiveOrders()
@@ -41,6 +41,26 @@ namespace BTCE_Trader.Api
                 toReturn.Add(newOrder);
             }
 
+
+            return toReturn;
+        }
+
+        public Dictionary<BtcePairEnum, MarketDepth> GetMarketDepths(List<BtcePairEnum> pairs)
+        {
+            var toReturn = new Dictionary<BtcePairEnum, MarketDepth>();
+
+            string parameters = "";
+            int c = 0;
+            foreach (var pair in pairs)
+            {
+                parameters += pair.ToString();
+                if (c < pairs.Count - 1)
+                    parameters += "-";
+
+                c++;
+            }
+
+            var result = V3Query("depth", parameters);
 
             return toReturn;
         }

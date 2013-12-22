@@ -33,6 +33,7 @@ namespace BTCE_Trader.Core.Orders
 
         private void DoWork()
         {
+            return;
             while (isRunning)
             {
                 var aorders = btceApi.GetActiveOrderList();

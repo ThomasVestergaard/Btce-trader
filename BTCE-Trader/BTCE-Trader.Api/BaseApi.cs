@@ -30,7 +30,11 @@ namespace BTCE_Trader.Api
         {
             return  webRequest.RequestData(methodName, new Dictionary<string, string>());
         }
-        
+
+        protected string V3Query(string methodName, string parameters)
+        {
+            return webRequest.RequestV3(methodName, parameters);
+        }
 
     }
 }

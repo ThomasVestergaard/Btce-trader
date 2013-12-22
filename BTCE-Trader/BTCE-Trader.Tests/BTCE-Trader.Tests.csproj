@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ActiveOrdersApiTests.cs" />
+    <Compile Include="Api\DepthApiTests.cs" />
     <Compile Include="Depth\DepthHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

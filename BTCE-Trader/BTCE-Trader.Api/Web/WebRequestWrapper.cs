@@ -55,6 +55,13 @@ namespace BTCE_Trader.Api.Web
             return new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();
         }
 
+        public string RequestV3(string method, string parameters)
+        {            
+            var wc = new WebClient();
+            string url = string.Format("https://btc-e.com/api/3/{0}/{1}?ignore_invalid=0", method, parameters);
+            return Encoding.UTF8.GetString(keyHasher.ComputeHash(wc.DownloadData(url)));
+        }
+
         private string BuildPostData(Dictionary<string, string> arguments)
         {
             StringBuilder s = new StringBuilder();

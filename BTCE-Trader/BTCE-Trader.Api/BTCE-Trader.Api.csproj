@@ -49,6 +49,10 @@
     <Compile Include="BtceTradeApi.cs" />
     <Compile Include="Configurations\Configuration.cs" />
     <Compile Include="Configurations\IConfiguration.cs" />
+    <Compile Include="Depth\DepthOrderInfo.cs" />
+    <Compile Include="Depth\IDepthOrderInfo.cs" />
+    <Compile Include="Depth\IMarketDepth.cs" />
+    <Compile Include="Depth\MarketDepth.cs" />
     <Compile Include="IBtceTradeApi.cs" />
     <Compile Include="Orders\IOrder.cs" />
     <Compile Include="Orders\Order.cs" />
