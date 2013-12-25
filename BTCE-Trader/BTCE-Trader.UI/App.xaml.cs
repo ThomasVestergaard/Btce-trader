@@ -27,12 +27,13 @@ namespace BTCE_Trader.UI
             pairs.Add(BtcePairEnum.ltc_usd);
 
             dependencyInjection.Container.Resolve<IDepthAgent>().Start(900, pairs);
-            //dependencyInjection.Container.Resolve<IActiveOrderAgent>().Start(500);
+            dependencyInjection.Container.Resolve<IActiveOrderAgent>().Start(500);
             Dispatcher.Invoke(Start);
         }
 
         private void Start()
         {
+            UiThread.Init(Dispatcher);
             var mainWindow = new MainWindow() { DataContext = dependencyInjection.Container.Resolve<MainWindowViewModel>() };
             mainWindow.Show();
         }
@@ -41,7 +42,7 @@ namespace BTCE_Trader.UI
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             dependencyInjection.Container.Resolve<IDepthAgent>().Stop();
-            //dependencyInjection.Container.Resolve<IActiveOrderAgent>().Stop();
+            dependencyInjection.Container.Resolve<IActiveOrderAgent>().Stop();
         }
     }
 }

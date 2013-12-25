@@ -44,8 +44,8 @@ namespace BTCE_Trader.Api.Web
             request.ContentLength = data.Length;
 
             request.Headers.Add("Key", configuration.PublicKey);
-            request.Headers.Add("Sign", Encoding.UTF8.GetString(keyHasher.ComputeHash(data)).ToLower());
-            var reqStream = request.GetRequestStream();
+            request.Headers.Add("Sign", BitConverter.ToString(keyHasher.ComputeHash(data)).Replace("-", "").ToLower());
+             var reqStream = request.GetRequestStream();
             reqStream.Write(data, 0, data.Length);
             reqStream.Close();
 

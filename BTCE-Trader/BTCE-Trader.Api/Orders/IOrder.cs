@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BTCE_Trader.Api.Orders
 {
     public interface IOrder
     {
+        string Id { get; set; }
         BtcePairEnum Pair { get; set; }
         TradeTypeEnum Type { get; set; }
         decimal Amount { get; set; }

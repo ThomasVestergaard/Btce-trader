@@ -27,6 +27,7 @@ namespace BTCE_Trader.Api
             {
                 var newOrder = new Order()
                 {
+                    Id = orderItem.Key,
                     Pair = BtcePairHelper.FromString(orderItem.Value["pair"].Value<string>()),
                     Type = TradeTypeHelper.FromString(orderItem.Value["type"].Value<string>()),
                     Amount = orderItem.Value["amount"].Value<decimal>(),
