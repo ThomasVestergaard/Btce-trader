@@ -311,7 +311,7 @@ namespace BtcE
 
         public static Dictionary<BtcePair, Depth> GetDepth(BtcePair[] pairlist, int limit = 150)
         {
-            return MakeRequest<Depth>("depth", pairlist, new Func<JContainer, Depth>(x => Depth.ReadFromJObject(x as JObject)), new Dictionary<string, string>() { { "limit", limit.ToString() } }, true);
+            return MakeRequest<Depth>("depth", pairlist, x => Depth.ReadFromJObject(x as JObject), new Dictionary<string, string>() { { "limit", limit.ToString() } }, true);
         }
 
         public static Dictionary<BtcePair, Ticker> GetTicker(BtcePair[] pairlist)

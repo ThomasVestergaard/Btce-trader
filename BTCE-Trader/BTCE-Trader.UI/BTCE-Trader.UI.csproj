@@ -119,10 +119,6 @@
       <Project>{edd98438-96a8-447a-a816-4ca42df48b19}</Project>
       <Name>BTCE-Trader.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BtceApi\BtceApi.csproj">
-      <Project>{266935b5-b5b2-462c-8308-20e2bd1360b5}</Project>
-      <Name>BtceApi</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

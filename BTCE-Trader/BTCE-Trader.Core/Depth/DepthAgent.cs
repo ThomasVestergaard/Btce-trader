@@ -1,21 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using BtcE;
-using System;
+using BTCE_Trader.Api;
+using BTCE_Trader.Api.Depth;
 
 namespace BTCE_Trader.Core.Depth
 {
     public class DepthAgent : IDepthAgent
     {
-        public delegate void DepthUpdatedDelegate(Dictionary<BtcePair, BtcE.Depth> pairDepthPairs);
+        private readonly IBtceTradeApi btceTradeApi;
+
+        public delegate void DepthUpdatedDelegate(Dictionary<BtcePairEnum, MarketDepth> pairDepthPairs);
         public event DepthUpdatedDelegate DepthUpdated;
 
         private Thread workerThread { get; set; }
         private int updateInterval { get; set; }
-        private List<BtcePair> pairs { get; set; }
+        private List<BtcePairEnum> pairs { get; set; }
         private bool isRunning { get; set; }
 
-        public void Start(int updateInterval, List<BtcePair> pairs)
+        public DepthAgent(IBtceTradeApi btceTradeApi)
+        {
+            this.btceTradeApi = btceTradeApi;
+        }
+
+        public void Start(int updateInterval, List<BtcePairEnum> pairs)
         {
             this.updateInterval = updateInterval;
             this.pairs = pairs;
@@ -28,7 +35,7 @@ namespace BTCE_Trader.Core.Depth
         {
             while (isRunning)
             {
-                var depth = BtceApiV3.GetDepth(pairs.ToArray());
+                var depth = btceTradeApi.GetMarketDepths(pairs);
                 if (depth != null)
                     RaiseDepthUpdatedEvent(depth);
 
@@ -42,7 +49,7 @@ namespace BTCE_Trader.Core.Depth
             workerThread.Join();
         }
 
-        private void RaiseDepthUpdatedEvent(Dictionary<BtcePair, BtcE.Depth> pairDepthPairs)
+        private void RaiseDepthUpdatedEvent(Dictionary<BtcePairEnum, MarketDepth> pairDepthPairs)
         {
             if (DepthUpdated != null)
                 DepthUpdated(pairDepthPairs);

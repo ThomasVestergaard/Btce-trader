@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
-using BtcE;
+using BTCE_Trader.Api;
+using BTCE_Trader.Api.Orders;
 
 namespace BTCE_Trader.Core.Orders
 {
     public class ActiveOrderAgent : IActiveOrderAgent
     {
-        public delegate void ActiveOrdersUpdatedDelegate(List<Order> activeOrders);
+        public delegate void ActiveOrdersUpdatedDelegate(List<IOrder> activeOrders);
         public event ActiveOrdersUpdatedDelegate ActiveOrdersUpdated;
 
         private Thread workerThread { get; set; }
         private int updateInterval { get; set; }
-        private BtceApi btceApi { get; set; }
+        private IBtceTradeApi btceApi { get; set; }
         private bool isRunning { get; set; }
 
-        public ActiveOrderAgent(BtceApi btceApi)
+        public ActiveOrderAgent(IBtceTradeApi btceApi)
         {
             this.btceApi = btceApi;
         }
@@ -33,15 +30,12 @@ namespace BTCE_Trader.Core.Orders
 
         private void DoWork()
         {
-            return;
+            
             while (isRunning)
             {
-                var aorders = btceApi.GetActiveOrderList();
-                
-                /*var activeOrder = btceApi.GetOrderList(null, null, null, null, null, null, null, null, true);
-                var activeOrderList = activeOrder.List.Select(a => a.Value).ToList();
+                var activeOrderList = btceApi.GetActiveOrders();
                 RaiseActiveUpdatedEvent(activeOrderList);
-                */
+                
                 Thread.Sleep(updateInterval);
             }
         }
@@ -52,7 +46,7 @@ namespace BTCE_Trader.Core.Orders
             workerThread.Join();
         }
 
-        private void RaiseActiveUpdatedEvent(List<Order> activeOrders)
+        private void RaiseActiveUpdatedEvent(List<IOrder> activeOrders)
         {
             if (ActiveOrdersUpdated != null)
                 ActiveOrdersUpdated(activeOrders);

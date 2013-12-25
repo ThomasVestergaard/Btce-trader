@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using BtcE;
+using BTCE_Trader.Api;
+
 
 namespace BTCE_Trader.Core.Depth
 {
     public interface IDepthAgent
     {
-        void Start(int updateInterval, List<BtcePair> pairs);
+        void Start(int updateInterval, List<BtcePairEnum> pairs);
         void Stop();
         event DepthAgent.DepthUpdatedDelegate DepthUpdated;
     }

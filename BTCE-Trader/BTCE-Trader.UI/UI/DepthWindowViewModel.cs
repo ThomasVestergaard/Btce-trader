@@ -1,37 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Linq;
+using BTCE_Trader.Api;
+using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Core.Depth;
 using BTCE_Trader.UI.Annotations;
-using BtcE;
 
 namespace BTCE_Trader.UI.UI
 {
     public class DepthWindowViewModel : INotifyPropertyChanged
     {
         private readonly IDepthAgent depthUpdater;
-        private List<OrderInfo> asks;
-        private List<OrderInfo> bids;
+        private List<IDepthOrderInfo> asks;
+        private List<IDepthOrderInfo> bids;
 
-        public List<OrderInfo> Asks
+        public List<IDepthOrderInfo> Asks
         {
             get { return asks; }
         }
-        public List<OrderInfo> Bids
+        public List<IDepthOrderInfo> Bids
         {
             get { return bids; }
         }
 
-        private List<OrderInfo> aggregatedAsks;
-        private List<OrderInfo> aggregatedBids;
+        private List<IDepthOrderInfo> aggregatedAsks;
+        private List<IDepthOrderInfo> aggregatedBids;
 
-        public List<OrderInfo> AggregatedAsks
+        public List<IDepthOrderInfo> AggregatedAsks
         {
             get { return aggregatedAsks; }
         }
-        public List<OrderInfo> AggregatedBids
+        public List<IDepthOrderInfo> AggregatedBids
         {
             get { return aggregatedBids; }
         }
@@ -48,21 +48,21 @@ namespace BTCE_Trader.UI.UI
 
         public DepthWindowViewModel(IDepthAgent depthUpdater)
         {
-            asks = new List<OrderInfo>();
-            bids = new List<OrderInfo>();
-            aggregatedAsks = new List<OrderInfo>();
-            aggregatedBids = new List<OrderInfo>();
+            asks = new List<IDepthOrderInfo>();
+            bids = new List<IDepthOrderInfo>();
+            aggregatedAsks = new List<IDepthOrderInfo>();
+            aggregatedBids = new List<IDepthOrderInfo>();
 
             this.depthUpdater = depthUpdater;
             this.depthUpdater.DepthUpdated += depthUpdater_DepthUpdated;
         }
 
-        void depthUpdater_DepthUpdated(System.Collections.Generic.Dictionary<BtcE.BtcePair, BtcE.Depth> pairDepthPairs)
+        void depthUpdater_DepthUpdated(Dictionary<BtcePairEnum, MarketDepth> pairDepthPairs)
         {
-            if (!pairDepthPairs.ContainsKey(BtcePair.ltc_btc))
+            if (!pairDepthPairs.ContainsKey(BtcePairEnum.ltc_btc))
                 return;
 
-            var depth = pairDepthPairs[BtcePair.ltc_btc];
+            var depth = pairDepthPairs[BtcePairEnum.ltc_btc];
 
             asks = depth.Asks.OrderBy(a => a.Price).Take(10).OrderByDescending(a => a.Price).ToList();
             bids = depth.Bids.OrderByDescending(a => a.Price).Take(10).ToList();

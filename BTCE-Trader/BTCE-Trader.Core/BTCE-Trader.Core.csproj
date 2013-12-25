@@ -56,10 +56,6 @@
       <Project>{04a3675f-0690-4ba4-96b2-a7b5007ce908}</Project>
       <Name>BTCE-Trader.Api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BtceApi\BtceApi.csproj">
-      <Project>{266935b5-b5b2-462c-8308-20e2bd1360b5}</Project>
-      <Name>BtceApi</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

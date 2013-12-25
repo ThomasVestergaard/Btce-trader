@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.Time;
@@ -11,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BTCE_Trader.Api
 {
-    public class BtceTradeApi : BaseApi
+    public class BtceTradeApi : BaseApi, IBtceTradeApi
     {
         public BtceTradeApi(IWebRequestWrapper webRequest) : base(webRequest)
         {
@@ -60,7 +57,27 @@ namespace BTCE_Trader.Api
                 c++;
             }
 
-            var result = V3Query("depth", parameters);
+            var urlData = V3Query("depth", parameters);
+            var webResult = JObject.Parse(urlData);
+
+            foreach (var pair in pairs)
+            {
+                toReturn.Add(pair, new MarketDepth());
+
+                foreach (var ask in webResult[BtcePairHelper.ToString(pairs[0])]["asks"])
+                {
+                    var price = ask[0].Value<decimal>();
+                    var amount = ask[1].Value<decimal>();
+                    toReturn[pair].Asks.Add(new DepthOrderInfo { Amount = amount, Price = price});
+                }
+
+                foreach (var bid in webResult[BtcePairHelper.ToString(pairs[0])]["bids"])
+                {
+                    var price = bid[0].Value<decimal>();
+                    var amount = bid[1].Value<decimal>();
+                    toReturn[pair].Bids.Add(new DepthOrderInfo { Amount = amount, Price = price });
+                }
+            }
 
             return toReturn;
         }

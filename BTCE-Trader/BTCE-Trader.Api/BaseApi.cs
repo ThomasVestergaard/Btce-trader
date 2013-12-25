@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using BTCE_Trader.Api.Configurations;
+﻿using System.Collections.Generic;
 using BTCE_Trader.Api.Web;
 
 namespace BTCE_Trader.Api

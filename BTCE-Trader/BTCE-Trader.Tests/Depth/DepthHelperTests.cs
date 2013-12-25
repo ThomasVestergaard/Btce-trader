@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BtcE;
+using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Core.Depth;
 using NUnit.Framework;
 
@@ -17,12 +14,12 @@ namespace BTCE_Trader.Tests.Depth
         [Test]
         public void ShouldAggregateListOfOrderInfos()
         {
-            var fullList = new List<OrderInfo>();
-            fullList.Add(new OrderInfo { Price = 12.0001m, Amount = 1 });
-            fullList.Add(new OrderInfo { Price = 12.99999m, Amount = 1 });
-            fullList.Add(new OrderInfo { Price = 13.499999m, Amount = 2 });
-            fullList.Add(new OrderInfo { Price = 13.99999m, Amount = 3 });
-            fullList.Add(new OrderInfo { Price = 13.79m, Amount = 0.5m });
+            var fullList = new List<IDepthOrderInfo>();
+            fullList.Add(new DepthOrderInfo { Price = 12.0001m, Amount = 1 });
+            fullList.Add(new DepthOrderInfo { Price = 12.99999m, Amount = 1 });
+            fullList.Add(new DepthOrderInfo { Price = 13.499999m, Amount = 2 });
+            fullList.Add(new DepthOrderInfo { Price = 13.99999m, Amount = 3 });
+            fullList.Add(new DepthOrderInfo { Price = 13.79m, Amount = 0.5m });
 
             var aggregatedList = DepthHelper.GetAggregatedAskOrderList(fullList, 0.5m);
 
