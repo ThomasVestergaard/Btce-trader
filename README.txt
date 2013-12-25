@@ -3,10 +3,17 @@ Btc-e api based on DmT021's C# wrapper. Please find it here: https://github.com/
 TODO:
 - Own btce API. Support following:
    - Get active order. (done)
-   - Get depth on pairs (in progress)
+   - Get depth on pairs (done)
    - Get latest trades on pairs.
    - Post order on exchange.
    - Cancel active order.
+
+- UI
+   - Display basic order depth (done)
+   - Format order depth nicely (In progress)
+   - Display aggregated order depth (done)
+   - Display active orders
+   - Cancel active orders
 
 
 
