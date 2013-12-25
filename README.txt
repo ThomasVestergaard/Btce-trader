@@ -15,7 +15,7 @@ TODO:
    - Add main window with ribbon (done)
    - Add avalon dock
    - Display aggregated order depth (done)
-   - Display active orders
+   - Display active orders (In progress - Buggy, concurrency issue)
    - Cancel active orders
 
 
