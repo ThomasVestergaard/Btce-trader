@@ -11,8 +11,8 @@ TODO:
 
 - UI (C# WPF MVVM)
    - Display basic order depth (done)
-   - Format order depth nicely (In progress)
-   - Add main window with ribbon
+   - Format order depth nicely (done)
+   - Add main window with ribbon (done)
    - Add avalon dock
    - Display aggregated order depth (done)
    - Display active orders
