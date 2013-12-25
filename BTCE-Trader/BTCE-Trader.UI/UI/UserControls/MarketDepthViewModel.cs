@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Core.Depth;
 using BTCE_Trader.UI.Annotations;
 
-namespace BTCE_Trader.UI.UI
+namespace BTCE_Trader.UI.UI.UserControls
 {
-    public class DepthWindowViewModel : INotifyPropertyChanged
+    public class MarketDepthViewModel : INotifyPropertyChanged
     {
         private readonly IDepthAgent depthUpdater;
         private List<IDepthOrderInfo> asks;
@@ -45,8 +45,7 @@ namespace BTCE_Trader.UI.UI
             }
         }
 
-
-        public DepthWindowViewModel(IDepthAgent depthUpdater)
+        public MarketDepthViewModel(IDepthAgent depthUpdater)
         {
             asks = new List<IDepthOrderInfo>();
             bids = new List<IDepthOrderInfo>();
@@ -57,7 +56,7 @@ namespace BTCE_Trader.UI.UI
             this.depthUpdater.DepthUpdated += depthUpdater_DepthUpdated;
         }
 
-        void depthUpdater_DepthUpdated(Dictionary<BtcePairEnum, MarketDepth> pairDepthPairs)
+        void depthUpdater_DepthUpdated(Dictionary<BtcePairEnum, Api.Depth.MarketDepth> pairDepthPairs)
         {
             if (!pairDepthPairs.ContainsKey(BtcePairEnum.ltc_btc))
                 return;
@@ -88,6 +87,4 @@ namespace BTCE_Trader.UI.UI
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-    
 }

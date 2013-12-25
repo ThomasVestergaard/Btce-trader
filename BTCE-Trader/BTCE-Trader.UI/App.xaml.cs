@@ -33,8 +33,8 @@ namespace BTCE_Trader.UI
 
         private void Start()
         {
-            var depthView = new DepthWindow() { DataContext = dependencyInjection.Container.Resolve<DepthWindowViewModel>() };
-            depthView.Show();
+            var mainWindow = new MainWindow() { DataContext = dependencyInjection.Container.Resolve<MainWindowViewModel>() };
+            mainWindow.Show();
         }
 
 

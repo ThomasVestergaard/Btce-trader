@@ -61,11 +61,6 @@ namespace BTCE_Trader.Api.Web
             if (request == null)
                 throw new Exception("Non HTTP WebRequest");
             return new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();
-
-            /*
-            var wc = new WebClient();
-            string url = string.Format("https://btc-e.com/api/3/{0}/{1}?ignore_invalid=0", method, parameters);
-            return Encoding.UTF8.GetString(keyHasher.ComputeHash(wc.DownloadData(url))); */
         }
 
         private string BuildPostData(Dictionary<string, string> arguments)

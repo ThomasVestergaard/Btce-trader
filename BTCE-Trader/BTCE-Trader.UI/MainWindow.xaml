@@ -1,8 +1,22 @@
 ﻿<Window x:Class="BTCE_Trader.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:depth="clr-namespace:BTCE_Trader.UI.UI.UserControls"
+        Title="BTC-E Trader" WindowState="Maximized" >
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         
+        <Ribbon Grid.Row="0">
+            <RibbonTab Header="Markets">
+                <RibbonGroup Header="Data">
+                    <RibbonButton Label="Market depth" />
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+        
+        <depth:MarketDepth Grid.Row="1" Pair="ltc_btc" DataContext="{Binding DepthViewModel}" />
     </Grid>
 </Window>
