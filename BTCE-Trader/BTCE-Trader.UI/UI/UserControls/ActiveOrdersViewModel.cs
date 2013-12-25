@@ -14,20 +14,14 @@ namespace BTCE_Trader.UI.UI.UserControls
     {
         private readonly IActiveOrderAgent activeOrderAgent;
         
-        private List<IOrder> activeOrders { get; set; }
-        public List<IOrder> ActiveOrders
-        {
-            get { return activeOrders; }
-            set { activeOrders = value; }
-        }
+        public ObservableCollection<IOrder> ActiveOrders { get; set; }
 
 
         private SynchronizationContext UiContext;
         public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent)
         {
             this.activeOrderAgent = activeOrderAgent;
-            activeOrders = new List<IOrder>();
-            ActiveOrders = new List<IOrder>();
+            ActiveOrders = new ObservableCollection<IOrder>();
             UiContext = SynchronizationContext.Current;
             this.activeOrderAgent.ActiveOrdersUpdated += activeOrderAgent_ActiveOrdersUpdated;
         }
@@ -43,17 +37,20 @@ namespace BTCE_Trader.UI.UI.UserControls
         private void SyncOrderCollection(List<IOrder> activeOrders)
         {
             // Remove orders
-            foreach (var activeOrder in this.activeOrders.ToList())
+            foreach (var activeOrder in ActiveOrders.ToList())
             {
-                if (activeOrders.Find(a => a.Id == activeOrder.Id) == null)
-                    this.activeOrders.Remove(activeOrder);
+                if (ActiveOrders.FirstOrDefault(a => a.Id == activeOrder.Id) == null)
+                    ActiveOrders.Remove(activeOrder);
             }
 
             foreach (var activeOrder in activeOrders.ToList())
             {
-                if (this.activeOrders.Find(a => a.Id == activeOrder.Id) == null)
-                    activeOrders.Add(activeOrder);
+                if (ActiveOrders.FirstOrDefault(a => a.Id == activeOrder.Id) == null)
+                    ActiveOrders.Add(activeOrder);
             }
+
+            if (activeOrders.Count == 0 && ActiveOrders.Count > 0)
+                ActiveOrders.Clear();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
