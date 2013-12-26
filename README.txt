@@ -22,7 +22,7 @@ TODO:
    - Display active orders (done)
    - Cancel active orders (done)
    - Place orders
-   - Show account info
+   - Show account info (In progress)
 
 External libraries used:
    - Newtonsoft.Json for jSon serialization
