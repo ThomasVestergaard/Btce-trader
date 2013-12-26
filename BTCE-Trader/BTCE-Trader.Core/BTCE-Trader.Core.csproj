@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountInfo\AccountInfoAgent.cs" />
+    <Compile Include="AccountInfo\IAccountInfoAgent.cs" />
     <Compile Include="Depth\DepthHelper.cs" />
     <Compile Include="Depth\DepthAgent.cs" />
     <Compile Include="Depth\IDepthAgent.cs" />

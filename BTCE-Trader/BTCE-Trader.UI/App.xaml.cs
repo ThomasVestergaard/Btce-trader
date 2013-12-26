@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using BTCE_Trader.Api;
+using BTCE_Trader.Core.AccountInfo;
 using BTCE_Trader.Core.Depth;
 using BTCE_Trader.UI.Commons;
 using BTCE_Trader.UI.UI;
@@ -27,7 +28,9 @@ namespace BTCE_Trader.UI
             pairs.Add(BtcePairEnum.ltc_usd);
 
             dependencyInjection.Container.Resolve<IDepthAgent>().Start(900, pairs);
+            dependencyInjection.Container.Resolve<IAccountInfoAgent>().Start(1000);
             dependencyInjection.Container.Resolve<IActiveOrderAgent>().Start(1000);
+
             Dispatcher.Invoke(Start);
         }
 
@@ -43,6 +46,7 @@ namespace BTCE_Trader.UI
         {
             dependencyInjection.Container.Resolve<IDepthAgent>().Stop();
             dependencyInjection.Container.Resolve<IActiveOrderAgent>().Stop();
+            dependencyInjection.Container.Resolve<IAccountInfoAgent>().Stop();
         }
     }
 }
