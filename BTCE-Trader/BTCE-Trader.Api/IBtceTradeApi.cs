@@ -8,5 +8,6 @@ namespace BTCE_Trader.Api
     {
         List<IOrder> GetActiveOrders();
         Dictionary<BtcePairEnum, MarketDepth> GetMarketDepths(List<BtcePairEnum> pairs);
+        void CancelOrder(string orderId);
     }
 }

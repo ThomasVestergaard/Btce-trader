@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using BTCE_Trader.Api;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Core.Orders;
 using BTCE_Trader.UI.Annotations;
@@ -17,23 +18,25 @@ namespace BTCE_Trader.UI.UI.UserControls
     public class ActiveOrdersViewModel : INotifyPropertyChanged
     {
         private readonly IActiveOrderAgent activeOrderAgent;
+        private readonly IBtceTradeApi tradeApi;
         public ObservableCollection<IOrder> ActiveOrders { get; set; }
         public ICommand CancelOrderCommand { get; set; }
 
-        public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent)
+        public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent, IBtceTradeApi tradeApi)
         {
             this.activeOrderAgent = activeOrderAgent;
+            this.tradeApi = tradeApi;
             ActiveOrders = new ObservableCollection<IOrder>();
             CancelOrderCommand = new RelayCommand(o =>
                 {
                     var currentOrder = ActiveOrders.ToList().Find(a => a.Id == (string) o);
                     if (currentOrder != null)
                     {
-                        string message = string.Format("Cancel order?:\n\n {0}", currentOrder.Summery);
+                        string message = string.Format("Confirm cancelation of order:\n\n {0}", currentOrder.Summery);
 
-                        if (MessageBox.Show(message, "Cancel order", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        if (MessageBox.Show(message, "Cancel order?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            
+                            tradeApi.CancelOrder(currentOrder.Id);
                         }
                     }
                 });

@@ -82,5 +82,12 @@ namespace BTCE_Trader.Api
 
             return toReturn;
         }
+
+        public void CancelOrder(string orderId)
+        {
+            var cancelOrderParams = new Dictionary<string, string>();
+            cancelOrderParams.Add("order_id", orderId);
+            var webResult = JObject.Parse(Query("CancelOrder",  cancelOrderParams));
+        }
     }
 }
