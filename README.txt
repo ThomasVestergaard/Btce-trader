@@ -11,7 +11,7 @@ TODO:
    - Get latest trades on pairs
    - Post order on exchange
    - Cancel active order (done)
-   - Get account info (In progress)
+   - Get account info (done)
 
 - UI (C# WPF MVVM)
    - Display basic order depth (done)
