@@ -6,6 +6,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <DataGrid ItemsSource="{Binding ActiveOrders}" AutoGenerateColumns="True" />
+        <DataGrid ItemsSource="{Binding ActiveOrders}" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding CreateDate}" />
+                <DataGridTextColumn Binding="{Binding Id}" />
+                <DataGridTextColumn Binding="{Binding Summery}" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button CommandParameter="{Binding Id}" Command="{Binding Path=DataContext.CancelOrderCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" Content="Cancel order" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            
+        </DataGrid>
     </Grid>
 </UserControl>

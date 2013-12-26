@@ -12,5 +12,6 @@ namespace BTCE_Trader.Api.Orders
         DateTime CreateDate { get; set; }
         int Status { get; set; }
 
+        string Summery { get; }
     }
 }

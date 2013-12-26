@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commons\RelayCommand.cs" />
     <Compile Include="Commons\UIThread.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

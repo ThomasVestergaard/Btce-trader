@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Core.Orders;
 using BTCE_Trader.UI.Annotations;
@@ -16,12 +18,25 @@ namespace BTCE_Trader.UI.UI.UserControls
     {
         private readonly IActiveOrderAgent activeOrderAgent;
         public ObservableCollection<IOrder> ActiveOrders { get; set; }
-        
+        public ICommand CancelOrderCommand { get; set; }
+
         public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent)
         {
             this.activeOrderAgent = activeOrderAgent;
             ActiveOrders = new ObservableCollection<IOrder>();
-            
+            CancelOrderCommand = new RelayCommand(o =>
+                {
+                    var currentOrder = ActiveOrders.ToList().Find(a => a.Id == (string) o);
+                    if (currentOrder != null)
+                    {
+                        string message = string.Format("Cancel order?:\n\n {0}", currentOrder.Summery);
+
+                        if (MessageBox.Show(message, "Cancel order", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            
+                        }
+                    }
+                });
             this.activeOrderAgent.ActiveOrdersUpdated +=  activeOrderAgent_ActiveOrdersUpdated;
         }
 
