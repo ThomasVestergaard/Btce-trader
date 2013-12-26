@@ -56,7 +56,7 @@ namespace BTCE_Trader.UI.UI.UserControls
             this.depthUpdater.DepthUpdated += depthUpdater_DepthUpdated;
         }
 
-        void depthUpdater_DepthUpdated(Dictionary<BtcePairEnum, Api.Depth.MarketDepth> pairDepthPairs)
+        void depthUpdater_DepthUpdated(Dictionary<BtcePairEnum, IMarketDepth> pairDepthPairs)
         {
             if (!pairDepthPairs.ContainsKey(BtcePairEnum.ltc_btc))
                 return;

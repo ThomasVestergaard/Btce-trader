@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AccountInfoTests.cs" />
     <Compile Include="Api\ActiveOrdersApiTests.cs" />
     <Compile Include="Api\DepthApiTests.cs" />
     <Compile Include="Depth\DepthHelperTests.cs" />

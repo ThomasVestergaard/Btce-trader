@@ -13,17 +13,21 @@ namespace BTCE_Trader.Api.Web
     {
         private IConfiguration configuration { get; set; }
         private HMACSHA512 keyHasher { get; set; }
+        private long sequenceIncrementer;
         private long requestSequenceNumber
         {
             get
             {
-                return (long)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                long seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer;
+                sequenceIncrementer++;
+                return seq;
             }
         }
 
         public WebRequestWrapper(IConfiguration configuration)
         {
             this.configuration = configuration;
+            sequenceIncrementer = 0;
             keyHasher = new HMACSHA512(Encoding.ASCII.GetBytes(configuration.SecretKey));
         }
 

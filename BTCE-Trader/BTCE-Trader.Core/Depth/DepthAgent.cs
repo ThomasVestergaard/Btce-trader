@@ -9,7 +9,7 @@ namespace BTCE_Trader.Core.Depth
     {
         private readonly IBtceTradeApi btceTradeApi;
 
-        public delegate void DepthUpdatedDelegate(Dictionary<BtcePairEnum, MarketDepth> pairDepthPairs);
+        public delegate void DepthUpdatedDelegate(Dictionary<BtcePairEnum, IMarketDepth> pairDepthPairs);
         public event DepthUpdatedDelegate DepthUpdated;
 
         private Thread workerThread { get; set; }
@@ -49,7 +49,7 @@ namespace BTCE_Trader.Core.Depth
             workerThread.Join();
         }
 
-        private void RaiseDepthUpdatedEvent(Dictionary<BtcePairEnum, MarketDepth> pairDepthPairs)
+        private void RaiseDepthUpdatedEvent(Dictionary<BtcePairEnum, IMarketDepth> pairDepthPairs)
         {
             if (DepthUpdated != null)
                 DepthUpdated(pairDepthPairs);

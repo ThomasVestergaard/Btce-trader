@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BTCE_Trader.Api.Depth;
+using BTCE_Trader.Api.Info;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.Time;
 using BTCE_Trader.Api.Web;
@@ -43,9 +44,9 @@ namespace BTCE_Trader.Api
             return toReturn;
         }
 
-        public Dictionary<BtcePairEnum, MarketDepth> GetMarketDepths(List<BtcePairEnum> pairs)
+        public Dictionary<BtcePairEnum, IMarketDepth> GetMarketDepths(List<BtcePairEnum> pairs)
         {
-            var toReturn = new Dictionary<BtcePairEnum, MarketDepth>();
+            var toReturn = new Dictionary<BtcePairEnum, IMarketDepth>();
 
             string parameters = "";
             int c = 0;
@@ -88,6 +89,68 @@ namespace BTCE_Trader.Api
             var cancelOrderParams = new Dictionary<string, string>();
             cancelOrderParams.Add("order_id", orderId);
             var webResult = JObject.Parse(Query("CancelOrder",  cancelOrderParams));
+        }
+
+        public IAccountInfo GetAccountInfo()
+        {
+            var webResult = JObject.Parse(Query("getInfo"));
+            
+            if (webResult["success"].Value<int>() == 0)
+                return null;
+
+            var toReturn = new AccountInfo();
+
+            foreach (var fundItem in webResult["return"].Value<JObject>()["funds"].Value<JObject>())
+            {
+                switch (fundItem.Key)
+                {
+                    case "usd" :
+                        toReturn.UsdAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "eur":
+                        toReturn.EurAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "rur":
+                        toReturn.RurAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "btc":
+                        toReturn.BtcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "ltc":
+                        toReturn.LtcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "nmc":
+                        toReturn.NmcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "trc":
+                        toReturn.TrcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "nvc":
+                        toReturn.NvcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "ppc":
+                        toReturn.PpcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "ftc":
+                        toReturn.FtcAmount = fundItem.Value.Value<decimal>();
+                        break;
+
+                    case "xpm":
+                        toReturn.XpmAmount = fundItem.Value.Value<decimal>();
+                        break;
+                }
+            }
+
+            return toReturn;
         }
     }
 }

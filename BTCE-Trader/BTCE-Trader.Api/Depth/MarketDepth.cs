@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BTCE_Trader.Api.Depth
 {
-    public class MarketDepth
+    public class MarketDepth : IMarketDepth
     {
         public List<IDepthOrderInfo> Bids { get; set; }
         public List<IDepthOrderInfo> Asks { get; set; }

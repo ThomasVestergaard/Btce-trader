@@ -24,6 +24,7 @@ namespace BTCE_Trader.UI.UI.UserControls
 
         public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent, IBtceTradeApi tradeApi)
         {
+            tradeApi.GetAccountInfo();
             this.activeOrderAgent = activeOrderAgent;
             this.tradeApi = tradeApi;
             ActiveOrders = new ObservableCollection<IOrder>();
