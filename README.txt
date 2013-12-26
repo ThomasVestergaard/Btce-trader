@@ -1,13 +1,17 @@
-Btc-e api based on DmT021's C# wrapper. Please find it here: https://github.com/DmT021/BtceApi
+This project contains two sub projects:
+1. Complete Btc-e API C# wrapper.
+2. C# WPF userinterface to handle trades through the API wrapper.
+
+
 
 TODO:
-- Own btce API. Support following:
+- Btce API. Support following:
    - Get active order. (done)
    - Get depth on pairs (done)
    - Get latest trades on pairs
    - Post order on exchange
-   - Cancel active order
-   - Get account info
+   - Cancel active order (done)
+   - Get account info (In progress)
 
 - UI (C# WPF MVVM)
    - Display basic order depth (done)
