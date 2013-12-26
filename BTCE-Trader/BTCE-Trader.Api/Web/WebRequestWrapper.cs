@@ -45,11 +45,13 @@ namespace BTCE_Trader.Api.Web
 
             request.Headers.Add("Key", configuration.PublicKey);
             request.Headers.Add("Sign", BitConverter.ToString(keyHasher.ComputeHash(data)).Replace("-", "").ToLower());
-             var reqStream = request.GetRequestStream();
+            var reqStream = request.GetRequestStream();
+            
             reqStream.Write(data, 0, data.Length);
+            
+            string toReturn = new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();
             reqStream.Close();
-
-            return new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();
+            return toReturn;
         }
 
         public string RequestV3(string method, string parameters)
