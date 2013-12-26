@@ -68,6 +68,10 @@
     <Compile Include="Commons\UIThread.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="UI\UserControls\AccountInfo.xaml.cs">
+      <DependentUpon>AccountInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\UserControls\AccountInfoViewModel.cs" />
     <Compile Include="UI\UserControls\ActiveOrders.xaml.cs">
       <DependentUpon>ActiveOrders.xaml</DependentUpon>
     </Compile>
@@ -89,6 +93,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\UserControls\AccountInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\UserControls\ActiveOrders.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

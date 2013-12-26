@@ -4,6 +4,6 @@
     {
         void Start(int updateInterval);
         void Stop();
-        
+        event AccountInfoAgent.AccountInfoUpdatedDelegate AccountUpdated;
     }
 }

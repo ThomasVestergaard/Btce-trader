@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BTCE_Trader.Api.Depth
+﻿namespace BTCE_Trader.Api.Depth
 {
     public class DepthOrderInfo : IDepthOrderInfo
     {
