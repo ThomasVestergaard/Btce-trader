@@ -15,8 +15,10 @@ TODO:
    - Add main window with ribbon (done)
    - Add avalon dock
    - Display aggregated order depth (done)
-   - Display active orders (In progress - Buggy, concurrency issue)
-   - Cancel active orders
+   - Display active orders (done)
+   - Cancel active orders (done)
+   - Place orders
+   - Show account info
 
 External libraries used:
    - Newtonsoft.Json for jSon serialization
