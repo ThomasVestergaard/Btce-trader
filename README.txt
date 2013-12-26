@@ -18,6 +18,12 @@ TODO:
    - Display active orders (In progress - Buggy, concurrency issue)
    - Cancel active orders
 
+External libraries used:
+   - Newtonsoft.Json for jSon serialization
+   - Castle windsor for dependency injection
+   - NUnit for unit testing
+   - Rhinomocks for mocking
+   - Avalon dock for UI
 
 
 BTCE-TRADER - C# WPF TRADING PLATFORM
