@@ -60,6 +60,9 @@ namespace BTCE_Trader.Api
             }
 
             var urlData = V3Query("depth", parameters);
+            if (urlData == null)
+                return null;
+
             var webResult = JObject.Parse(urlData);
 
             foreach (var pair in pairs)

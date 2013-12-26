@@ -23,7 +23,7 @@ namespace BTCE_Trader.Tests.Depth
 
             var aggregatedList = DepthHelper.GetAggregatedAskOrderList(fullList, 0.5m);
 
-            Assert.AreEqual(1, aggregatedList.Find(a => a.Price == 12).Amount);
+            Assert.AreEqual(1, aggregatedList.Find(a => a.Price == 12.0001m).Amount);
             Assert.AreEqual(1, aggregatedList.Find(a => a.Price == 12.5m).Amount);
             Assert.AreEqual(2, aggregatedList.Find(a => a.Price == 13).Amount);
             Assert.AreEqual(3.5, aggregatedList.Find(a => a.Price == 13.5m).Amount);
