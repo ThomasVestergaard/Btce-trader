@@ -14,6 +14,7 @@
             <RibbonTab Header="Markets">
                 <RibbonGroup Header="Data">
                     <RibbonButton Label="Market depth" />
+                    <RibbonButton Label="Make trade!" Command="{Binding DemoTradeCommand}" />
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

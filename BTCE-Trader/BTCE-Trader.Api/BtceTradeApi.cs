@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Info;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.Time;
+using BTCE_Trader.Api.Trade;
 using BTCE_Trader.Api.Web;
 using Newtonsoft.Json.Linq;
 
@@ -151,6 +153,33 @@ namespace BTCE_Trader.Api
                         toReturn.XpmAmount = fundItem.Value.Value<decimal>();
                         break;
                 }
+            }
+
+            return toReturn;
+        }
+
+        public ITradeResult MakeTrade(ITradeRequest tradeRequest)
+        {
+            var toReturn = new TradeResult();
+
+            var p = new Dictionary<string, string>();
+            p.Add("pair", BtcePairHelper.ToString(tradeRequest.Pair));
+            p.Add("type", TradeTypeHelper.ToString(tradeRequest.TradeType));
+            p.Add("rate", tradeRequest.Rate.ToString(CultureInfo.InvariantCulture));
+            p.Add("amount", tradeRequest.Amount.ToString(CultureInfo.InvariantCulture));
+
+            string tradeResult = Query("Trade", p);
+            var tradeResponse = JObject.Parse(tradeResult);
+
+            if (tradeResponse["success"].Value<int>() == 0)
+            {
+                toReturn.IsSuccess = false;
+                toReturn.ErrorMessage = tradeResponse["error"].Value<string>();
+            }
+            else
+            {
+                toReturn.IsSuccess = true;
+                toReturn.ErrorMessage = string.Empty;
             }
 
             return toReturn;

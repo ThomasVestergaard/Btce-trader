@@ -52,6 +52,8 @@
     <Compile Include="Orders\IActiveOrderAgent.cs" />
     <Compile Include="Orders\ActiveOrderAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trade\ITradeAgent.cs" />
+    <Compile Include="Trade\TradeAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BTCE-Trader.Api\BTCE-Trader.Api.csproj">

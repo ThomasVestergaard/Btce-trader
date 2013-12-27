@@ -13,13 +13,19 @@ namespace BTCE_Trader.Api.Web
     {
         private IConfiguration configuration { get; set; }
         private HMACSHA512 keyHasher { get; set; }
+        private object lockObject = new object();
         private long sequenceIncrementer;
         private long requestSequenceNumber
         {
             get
             {
-                long seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer;
-                sequenceIncrementer++;
+                long seq;
+                lock (lockObject)
+                {
+                    seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer;
+                    Console.WriteLine(seq);
+                    sequenceIncrementer++;
+                }
                 return seq;
             }
         }
