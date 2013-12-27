@@ -4,8 +4,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="200">
     <Grid>
-            
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock Text="USD:" Width="30" HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding AccountInfo.UsdAmount}" Width="100" TextAlignment="Right" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock Text="EUR:" Width="30" HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding AccountInfo.EurAmount}" Width="100" TextAlignment="Right" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock Text="RUR:" Width="30" HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding AccountInfo.RurAmount}" Width="100" TextAlignment="Right" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,30,0,0">
+                <TextBlock Text="BTC:" Width="30" HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding AccountInfo.BtcAmount}" Width="100" TextAlignment="Right" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock Text="LTC:" Width="30" HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding AccountInfo.LtcAmount}" Width="100" TextAlignment="Right" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock Text="NMC:" Width="30" HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding AccountInfo.NmcAmount}" Width="100" TextAlignment="Right" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

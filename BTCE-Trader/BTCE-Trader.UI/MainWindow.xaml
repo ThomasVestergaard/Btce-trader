@@ -18,7 +18,11 @@
             </RibbonTab>
         </Ribbon>
         
-        <UI:MarketDepth Grid.Row="1" Pair="ltc_btc" DataContext="{Binding DepthViewModel}" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <UI:MarketDepth Pair="ltc_btc" DataContext="{Binding DepthViewModel}" />
+            <UI:AccountInfo DataContext="{Binding AccountInfoViewModel}" />
+        </StackPanel>
+        
 
         <UI:ActiveOrders Grid.Row="2"  DataContext="{Binding ActiveOrdersViewModel}" />
     </Grid>
