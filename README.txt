@@ -9,7 +9,7 @@ TODO:
    - Get active order. (done)
    - Get depth on pairs (done)
    - Get latest trades on pairs
-   - Post order on exchange
+   - Post order on exchange (In progress)
    - Cancel active order (done)
    - Get account info (done)
 
@@ -22,7 +22,7 @@ TODO:
    - Display active orders (done)
    - Cancel active orders (done)
    - Place orders
-   - Show account info (In progress)
+   - Show account info (done)
 
 External libraries used:
    - Newtonsoft.Json for jSon serialization
