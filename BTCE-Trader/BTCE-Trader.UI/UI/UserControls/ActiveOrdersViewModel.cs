@@ -1,33 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Orders;
-using BTCE_Trader.Core.Orders;
-using BTCE_Trader.UI.Annotations;
 using System.Linq;
 using BTCE_Trader.UI.Commons;
+using IActiveOrderAgent = BTCE_Trader.UI.UpdateAgents.Orders.IActiveOrderAgent;
 
 
 namespace BTCE_Trader.UI.UI.UserControls
 {
-    public class ActiveOrdersViewModel : INotifyPropertyChanged
+    public class ActiveOrdersViewModel : BaseViewModel
     {
         private readonly IActiveOrderAgent activeOrderAgent;
         private readonly IBtceTradeApi tradeApi;
+        private readonly IBtceModels btceModels;
         public ObservableCollection<IOrder> ActiveOrders { get; set; }
         public ICommand CancelOrderCommand { get; set; }
 
-        public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent, IBtceTradeApi tradeApi)
+        public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent, IBtceTradeApi tradeApi, IBtceModels btceModels)
         {
-            tradeApi.GetAccountInfo();
             this.activeOrderAgent = activeOrderAgent;
             this.tradeApi = tradeApi;
-            ActiveOrders = new ObservableCollection<IOrder>();
+            this.btceModels = btceModels;
+            this.btceModels.ActiveOrdersUpdated += btceModels_ActiveOrdersUpdated;
+            
             CancelOrderCommand = new RelayCommand(o =>
                 {
                     var currentOrder = ActiveOrders.ToList().Find(a => a.Id == (string) o);
@@ -41,54 +39,20 @@ namespace BTCE_Trader.UI.UI.UserControls
                         }
                     }
                 });
-            this.activeOrderAgent.ActiveOrdersUpdated +=  activeOrderAgent_ActiveOrdersUpdated;
-        }
-
-        void activeOrderAgent_ActiveOrdersUpdated(List<IOrder> activeOrders)
-        {
-            UiThread.UiDispatcher.BeginInvoke(new Action(() =>
-                {
-                    SyncOrderCollection(activeOrders);
-                }));
-
             
         }
 
-        private void SyncOrderCollection(List<IOrder> activeOrders)
+        void btceModels_ActiveOrdersUpdated(object sender, System.EventArgs e)
         {
-            bool hasChanged = false;
-            // Remove orders
-            foreach (var activeOrder in ActiveOrders.ToList())
-            {
-                if (ActiveOrders.FirstOrDefault(a => a.Id == activeOrder.Id) == null)
+            UiThread.UiDispatcher.Invoke(() =>
                 {
-                    ActiveOrders.Remove(activeOrder);
-                    hasChanged = true;
-                }
-            }
+                    ActiveOrders = new ObservableCollection<IOrder>(btceModels.ActiveOrders);
+                    OnPropertyChanged("ActiveOrders");
+                });
 
-            foreach (var activeOrder in activeOrders.ToList())
-            {
-                if (ActiveOrders.FirstOrDefault(a => a.Id == activeOrder.Id) == null)
-                {
-                    ActiveOrders.Add(activeOrder);
-                    hasChanged = true;
-                }
-            }
-
-            if (activeOrders.Count == 0 && ActiveOrders.Count > 0)
-                ActiveOrders.Clear();
-
-            //OnPropertyChanged("ActiveOrders");
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

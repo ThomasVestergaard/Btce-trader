@@ -6,26 +6,23 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using BTCE_Trader.Api.Configurations;
+using log4net;
 
 namespace BTCE_Trader.Api.Web
 {
     public class WebRequestWrapper : IWebRequestWrapper
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(WebRequestWrapper));
+
         private IConfiguration configuration { get; set; }
         private HMACSHA512 keyHasher { get; set; }
-        private object lockObject = new object();
         private long sequenceIncrementer;
         private long requestSequenceNumber
         {
             get
             {
-                long seq;
-                lock (lockObject)
-                {
-                    seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer;
-                    Console.WriteLine(seq);
-                    sequenceIncrementer++;
-                }
+                long seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer;
+                sequenceIncrementer++;
                 return seq;
             }
         }
@@ -86,6 +83,8 @@ namespace BTCE_Trader.Api.Web
             if (s.Length > 0) s.Remove(s.Length - 1, 1);
             return s.ToString();
         }
+
+        
 
     }
 }

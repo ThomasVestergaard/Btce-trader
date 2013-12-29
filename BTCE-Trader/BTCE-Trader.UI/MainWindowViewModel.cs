@@ -1,13 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Trade;
-using BTCE_Trader.Core.AccountInfo;
-using BTCE_Trader.Core.Depth;
-using BTCE_Trader.Core.Orders;
-using BTCE_Trader.Core.Trade;
 using BTCE_Trader.UI.Commons;
 using BTCE_Trader.UI.UI.UserControls;
+using BTCE_Trader.UI.UpdateAgents.AccountInfo;
+using BTCE_Trader.UI.UpdateAgents.Depth;
+using BTCE_Trader.UI.UpdateAgents.Orders;
+using BTCE_Trader.UI.UpdateAgents.Trade;
+
 
 namespace BTCE_Trader.UI
 {
@@ -18,6 +18,7 @@ namespace BTCE_Trader.UI
         private readonly IBtceTradeApi btceTradeApi;
         private readonly IAccountInfoAgent accountInfoAgent;
         private readonly ITradeAgent tradeAgent;
+        private readonly IBtceModels btceModels;
         public ICommand DemoTradeCommand { get; set; }
 
         public IDepthAgent DepthAgent
@@ -30,17 +31,18 @@ namespace BTCE_Trader.UI
         public ActiveOrdersViewModel ActiveOrdersViewModel { get; set; }
         public AccountInfoViewModel AccountInfoViewModel { get; set; }
 
-        public MainWindowViewModel(IDepthAgent depthAgent, IActiveOrderAgent activeOrderAgent, IBtceTradeApi btceTradeApi, IAccountInfoAgent accountInfoAgent, ITradeAgent tradeAgent)
+        public MainWindowViewModel(IDepthAgent depthAgent, IActiveOrderAgent activeOrderAgent, IBtceTradeApi btceTradeApi, IAccountInfoAgent accountInfoAgent, ITradeAgent tradeAgent, IBtceModels btceModels)
         {
             this.depthAgent = depthAgent;
             this.activeOrderAgent = activeOrderAgent;
             this.btceTradeApi = btceTradeApi;
             this.accountInfoAgent = accountInfoAgent;
             this.tradeAgent = tradeAgent;
+            this.btceModels = btceModels;
 
             DepthViewModel = new MarketDepthViewModel(depthAgent);
-            ActiveOrdersViewModel = new ActiveOrdersViewModel(activeOrderAgent, btceTradeApi);
-            AccountInfoViewModel = new AccountInfoViewModel(accountInfoAgent);
+            ActiveOrdersViewModel = new ActiveOrdersViewModel(activeOrderAgent, btceTradeApi, btceModels);
+            AccountInfoViewModel = new AccountInfoViewModel(btceModels);
 
             DemoTradeCommand = new RelayCommand((parameter) =>
                 {
@@ -53,7 +55,6 @@ namespace BTCE_Trader.UI
                         };
 
                     //tradeAgent.MakeTrade(tradeRequest);
-
                 });
         }
     }

@@ -1,9 +1,8 @@
-﻿namespace BTCE_Trader.Core.AccountInfo
+﻿namespace BTCE_Trader.UI.UpdateAgents.AccountInfo
 {
     public interface IAccountInfoAgent
     {
         void Start(int updateInterval);
         void Stop();
-        event AccountInfoAgent.AccountInfoUpdatedDelegate AccountUpdated;
     }
 }

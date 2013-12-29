@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Atomic">
+      <HintPath>..\ThirdParty\Disrupter\Atomic.dll</HintPath>
+    </Reference>
+    <Reference Include="Disruptor">
+      <HintPath>..\ThirdParty\Disrupter\Disruptor.dll</HintPath>
+    </Reference>
+    <Reference Include="Disruptor.Scheduler">
+      <HintPath>..\ThirdParty\Disrupter\Disruptor.Scheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\ThirdParty\log4net.2.0.0\lib\net40-client\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\ThirdParty\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -44,7 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseApi.cs" />
+    <Compile Include="BtceModels.cs" />
     <Compile Include="BtcePairEnum.cs" />
     <Compile Include="BtceTradeApi.cs" />
     <Compile Include="Configurations\Configuration.cs" />
@@ -53,18 +65,28 @@
     <Compile Include="Depth\IDepthOrderInfo.cs" />
     <Compile Include="Depth\IMarketDepth.cs" />
     <Compile Include="Depth\MarketDepth.cs" />
+    <Compile Include="IBtceModels.cs" />
     <Compile Include="IBtceTradeApi.cs" />
     <Compile Include="Info\AccountInfo.cs" />
     <Compile Include="Info\IAccountInfo.cs" />
     <Compile Include="Orders\IOrder.cs" />
     <Compile Include="Orders\Order.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestQueue\InputQueueItem.cs" />
+    <Compile Include="RequestQueue\IRequestInputQueue.cs" />
+    <Compile Include="RequestQueue\IRequestOutputQueue.cs" />
+    <Compile Include="RequestQueue\OutputQueueItem.cs" />
+    <Compile Include="RequestQueue\RequestInputQueue.cs" />
+    <Compile Include="RequestQueue\RequestOutputQueue.cs" />
     <Compile Include="Time\UnixTimeHelper.cs" />
     <Compile Include="TradeTypeEnum.cs" />
     <Compile Include="Trade\ITradeRequest.cs" />
     <Compile Include="Trade\ITradeResult.cs" />
     <Compile Include="Trade\TradeRequest.cs" />
     <Compile Include="Trade\TradeResult.cs" />
+    <Compile Include="Web\IInputRequestHandler.cs" />
+    <Compile Include="Web\InputRequestHandler.cs" />
     <Compile Include="Web\IWebRequestWrapper.cs" />
     <Compile Include="Web\WebRequestWrapper.cs" />
   </ItemGroup>

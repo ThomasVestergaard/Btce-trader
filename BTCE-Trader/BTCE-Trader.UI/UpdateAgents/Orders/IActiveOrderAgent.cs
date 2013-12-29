@@ -1,4 +1,4 @@
-﻿namespace BTCE_Trader.Core.Orders
+﻿namespace BTCE_Trader.UI.UpdateAgents.Orders
 {
     public interface IActiveOrderAgent
     {

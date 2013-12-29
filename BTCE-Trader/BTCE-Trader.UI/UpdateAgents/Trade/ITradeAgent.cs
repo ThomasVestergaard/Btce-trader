@@ -1,6 +1,6 @@
 ﻿using BTCE_Trader.Api.Trade;
 
-namespace BTCE_Trader.Core.Trade
+namespace BTCE_Trader.UI.UpdateAgents.Trade
 {
     public interface ITradeAgent
     {

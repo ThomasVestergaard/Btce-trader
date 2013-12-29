@@ -1,51 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using BTCE_Trader.Api.Depth;
-using BTCE_Trader.Api.Info;
-using BTCE_Trader.Api.Orders;
-using BTCE_Trader.Api.Time;
+using BTCE_Trader.Api.RequestQueue;
 using BTCE_Trader.Api.Trade;
 using BTCE_Trader.Api.Web;
 using Newtonsoft.Json.Linq;
 
 namespace BTCE_Trader.Api
 {
-    public class BtceTradeApi : BaseApi, IBtceTradeApi
+    public class BtceTradeApi : IBtceTradeApi
     {
-        public BtceTradeApi(IWebRequestWrapper webRequest) : base(webRequest)
+        public const string BtceCommandCancelOrder = "CancelOrder";
+        public const string BtceCommandTrade = "Trade";
+        public const string BtceCommandActiveOrders = "ActiveOrders";
+        public const string BtceCommandAccountInfo = "getInfo";
+
+        private readonly IRequestInputQueue requestInputQueue;
+        private IWebRequestWrapper webRequest { get; set; }
+
+
+        public BtceTradeApi(IWebRequestWrapper webRequest, IRequestInputQueue requestInputQueue)
         {
+            this.webRequest = webRequest;
+            this.requestInputQueue = requestInputQueue;
         }
 
-        public List<IOrder> GetActiveOrders()
-        {
-            var toReturn = new List<IOrder>();
-
-            var webResult = JObject.Parse(Query("ActiveOrders"));
-            
-            if (webResult["success"].Value<int>() == 0)
-                return toReturn;
-
-            foreach (var orderItem in webResult["return"].Value<JObject>())
+        public void GetActiveOrders()
+        {   
+            requestInputQueue.AddItemToQueue(new InputQueueItem
             {
-                var newOrder = new Order()
-                {
-                    Id = orderItem.Key,
-                    Pair = BtcePairHelper.FromString(orderItem.Value["pair"].Value<string>()),
-                    Type = TradeTypeHelper.FromString(orderItem.Value["type"].Value<string>()),
-                    Amount = orderItem.Value["amount"].Value<decimal>(),
-                    Rate = orderItem.Value["rate"].Value<decimal>(),
-                    CreateDate = UnixTimeHelper.UnixTimeToDateTime(orderItem.Value["timestamp_created"].Value<UInt32>()),
-                    Status = orderItem.Value["status"].Value<int>()
-                };
-
-                toReturn.Add(newOrder);
-            }
-
-
-            return toReturn;
+                MethodName = BtceCommandActiveOrders,
+                MethodParameters = new Dictionary<string, string>()
+            });
         }
-
         public Dictionary<BtcePairEnum, IMarketDepth> GetMarketDepths(List<BtcePairEnum> pairs)
         {
             var toReturn = new Dictionary<BtcePairEnum, IMarketDepth>();
@@ -61,7 +48,7 @@ namespace BTCE_Trader.Api
                 c++;
             }
 
-            var urlData = V3Query("depth", parameters);
+            var urlData = webRequest.RequestV3("depth", parameters);
             if (urlData == null)
                 return null;
 
@@ -88,86 +75,41 @@ namespace BTCE_Trader.Api
 
             return toReturn;
         }
-
         public void CancelOrder(string orderId)
         {
             var cancelOrderParams = new Dictionary<string, string>();
             cancelOrderParams.Add("order_id", orderId);
-            var webResult = JObject.Parse(Query("CancelOrder",  cancelOrderParams));
-        }
 
-        public IAccountInfo GetAccountInfo()
-        {
-            var webResult = JObject.Parse(Query("getInfo"));
-            
-            if (webResult["success"].Value<int>() == 0)
-                return null;
-
-            var toReturn = new AccountInfo();
-
-            foreach (var fundItem in webResult["return"].Value<JObject>()["funds"].Value<JObject>())
+            requestInputQueue.AddItemToQueue(new InputQueueItem
             {
-                switch (fundItem.Key)
-                {
-                    case "usd" :
-                        toReturn.UsdAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "eur":
-                        toReturn.EurAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "rur":
-                        toReturn.RurAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "btc":
-                        toReturn.BtcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "ltc":
-                        toReturn.LtcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "nmc":
-                        toReturn.NmcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "trc":
-                        toReturn.TrcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "nvc":
-                        toReturn.NvcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "ppc":
-                        toReturn.PpcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "ftc":
-                        toReturn.FtcAmount = fundItem.Value.Value<decimal>();
-                        break;
-
-                    case "xpm":
-                        toReturn.XpmAmount = fundItem.Value.Value<decimal>();
-                        break;
-                }
-            }
-
-            return toReturn;
+                MethodName = BtceCommandCancelOrder,
+                MethodParameters = cancelOrderParams
+            });
         }
-
-        public ITradeResult MakeTrade(ITradeRequest tradeRequest)
+        public void GetAccountInfo()
         {
-            var toReturn = new TradeResult();
-
+            requestInputQueue.AddItemToQueue(new InputQueueItem
+            {
+                MethodName = BtceCommandAccountInfo,
+                MethodParameters = new Dictionary<string, string>()
+            });
+        }
+        public void MakeTrade(ITradeRequest tradeRequest)
+        {
             var p = new Dictionary<string, string>();
             p.Add("pair", BtcePairHelper.ToString(tradeRequest.Pair));
             p.Add("type", TradeTypeHelper.ToString(tradeRequest.TradeType));
             p.Add("rate", tradeRequest.Rate.ToString(CultureInfo.InvariantCulture));
             p.Add("amount", tradeRequest.Amount.ToString(CultureInfo.InvariantCulture));
 
+            requestInputQueue.AddItemToQueue(new InputQueueItem
+                {
+                    MethodName = BtceCommandTrade,
+                    MethodParameters = p
+                });
+
+            
+            /*
             string tradeResult = Query("Trade", p);
             var tradeResponse = JObject.Parse(tradeResult);
 
@@ -182,7 +124,10 @@ namespace BTCE_Trader.Api
                 toReturn.ErrorMessage = string.Empty;
             }
 
-            return toReturn;
+            return toReturn;*/
         }
+
+        
+
     }
 }

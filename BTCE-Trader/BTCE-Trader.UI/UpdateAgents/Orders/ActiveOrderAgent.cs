@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Orders;
 
-namespace BTCE_Trader.Core.Orders
+namespace BTCE_Trader.UI.UpdateAgents.Orders
 {
     public class ActiveOrderAgent : IActiveOrderAgent
     {
+        private readonly IBtceModels btceModels;
+
         public delegate void ActiveOrdersUpdatedDelegate(List<IOrder> activeOrders);
         public event ActiveOrdersUpdatedDelegate ActiveOrdersUpdated;
 
@@ -14,10 +17,21 @@ namespace BTCE_Trader.Core.Orders
         private int updateInterval { get; set; }
         private IBtceTradeApi btceApi { get; set; }
         private bool isRunning { get; set; }
+        private bool hasReceivedLastRequst { get; set; }
+        private DateTime lastRequestTime { get; set; }
 
-        public ActiveOrderAgent(IBtceTradeApi btceApi)
+        public ActiveOrderAgent(IBtceTradeApi btceApi, IBtceModels btceModels)
         {
+            lastRequestTime = DateTime.Now.AddSeconds(-10);
+            hasReceivedLastRequst = true;
+            btceModels.ActiveOrdersUpdated += btceModels_ActiveOrdersUpdated;
+            this.btceModels = btceModels;
             this.btceApi = btceApi;
+        }
+
+        void btceModels_ActiveOrdersUpdated(object sender, EventArgs e)
+        {
+            hasReceivedLastRequst = true;
         }
 
         public void Start(int updateInterval)
@@ -30,13 +44,18 @@ namespace BTCE_Trader.Core.Orders
 
         private void DoWork()
         {
-            
             while (isRunning)
             {
-                var activeOrderList = btceApi.GetActiveOrders();
-                RaiseActiveUpdatedEvent(activeOrderList);
-                
-                Thread.Sleep(updateInterval);
+                var timeCheck = (DateTime.Now - lastRequestTime);
+                if (hasReceivedLastRequst && timeCheck.TotalMilliseconds >= updateInterval)
+                {
+                    Console.WriteLine("Sending active orders request");
+                    btceApi.GetActiveOrders();
+                    lastRequestTime = DateTime.Now;
+                    hasReceivedLastRequst = false;
+                }
+
+                Thread.Sleep(10);
             }
         }
 

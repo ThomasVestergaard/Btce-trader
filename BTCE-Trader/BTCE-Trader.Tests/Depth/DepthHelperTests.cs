@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BTCE_Trader.Api.Depth;
-using BTCE_Trader.Core.Depth;
+using BTCE_Trader.UI.UpdateAgents.Depth;
 using NUnit.Framework;
 
 namespace BTCE_Trader.Tests.Depth

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Disruptor">
+      <HintPath>..\ThirdParty\Disrupter\Disruptor.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\ThirdParty\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -56,9 +59,9 @@
       <Project>{04a3675f-0690-4ba4-96b2-a7b5007ce908}</Project>
       <Name>BTCE-Trader.Api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BTCE-Trader.Core\BTCE-Trader.Core.csproj">
-      <Project>{edd98438-96a8-447a-a816-4ca42df48b19}</Project>
-      <Name>BTCE-Trader.Core</Name>
+    <ProjectReference Include="..\BTCE-Trader.UI\BTCE-Trader.UI.csproj">
+      <Project>{61a42a58-ec4e-4f3d-8c52-1cf6931559ca}</Project>
+      <Name>BTCE-Trader.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

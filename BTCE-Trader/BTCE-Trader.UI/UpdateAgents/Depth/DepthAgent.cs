@@ -3,7 +3,7 @@ using System.Threading;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Depth;
 
-namespace BTCE_Trader.Core.Depth
+namespace BTCE_Trader.UI.UpdateAgents.Depth
 {
     public class DepthAgent : IDepthAgent
     {

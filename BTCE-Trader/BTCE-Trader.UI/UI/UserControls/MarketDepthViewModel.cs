@@ -4,8 +4,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Depth;
-using BTCE_Trader.Core.Depth;
 using BTCE_Trader.UI.Annotations;
+using BTCE_Trader.UI.UpdateAgents.Depth;
+using DepthHelper = BTCE_Trader.UI.UpdateAgents.Depth.DepthHelper;
 
 namespace BTCE_Trader.UI.UI.UserControls
 {

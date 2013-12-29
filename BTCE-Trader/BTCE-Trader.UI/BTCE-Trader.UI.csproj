@@ -40,6 +40,9 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\ThirdParty\Castle.Windsor.3.2.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Disruptor">
+      <HintPath>..\ThirdParty\Disrupter\Disruptor.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -68,6 +71,7 @@
     <Compile Include="Commons\UIThread.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="UI\BaseViewModel.cs" />
     <Compile Include="UI\UserControls\AccountInfo.xaml.cs">
       <DependentUpon>AccountInfo.xaml</DependentUpon>
     </Compile>
@@ -80,6 +84,15 @@
       <DependentUpon>MarketDepth.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UserControls\MarketDepthViewModel.cs" />
+    <Compile Include="UpdateAgents\AccountInfo\AccountInfoAgent.cs" />
+    <Compile Include="UpdateAgents\AccountInfo\IAccountInfoAgent.cs" />
+    <Compile Include="UpdateAgents\Depth\DepthAgent.cs" />
+    <Compile Include="UpdateAgents\Depth\DepthHelper.cs" />
+    <Compile Include="UpdateAgents\Depth\IDepthAgent.cs" />
+    <Compile Include="UpdateAgents\Orders\ActiveOrderAgent.cs" />
+    <Compile Include="UpdateAgents\Orders\IActiveOrderAgent.cs" />
+    <Compile Include="UpdateAgents\Trade\ITradeAgent.cs" />
+    <Compile Include="UpdateAgents\Trade\TradeAgent.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -137,10 +150,6 @@
     <ProjectReference Include="..\BTCE-Trader.Api\BTCE-Trader.Api.csproj">
       <Project>{04a3675f-0690-4ba4-96b2-a7b5007ce908}</Project>
       <Name>BTCE-Trader.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BTCE-Trader.Core\BTCE-Trader.Core.csproj">
-      <Project>{edd98438-96a8-447a-a816-4ca42df48b19}</Project>
-      <Name>BTCE-Trader.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BTCE_Trader.Api;
+using BTCE_Trader.Api.RequestQueue;
 using BTCE_Trader.Api.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -11,13 +12,15 @@ namespace BTCE_Trader.Tests.Api
     {
 
         private IWebRequestWrapper webRequestWrapperMock;
+        private IRequestInputQueue requestInputQueueMock;
         private BtceTradeApi btceApi;
 
         [SetUp]
         public void SetUp()
         {
             webRequestWrapperMock = MockRepository.GenerateMock<IWebRequestWrapper>();
-            btceApi = new BtceTradeApi(webRequestWrapperMock);
+            requestInputQueueMock = MockRepository.GenerateMock<IRequestInputQueue>();
+            btceApi = new BtceTradeApi(webRequestWrapperMock, requestInputQueueMock);
         }
 
         [Test]
