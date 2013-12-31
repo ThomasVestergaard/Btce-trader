@@ -14,6 +14,7 @@ namespace BTCE_Trader.Api
         public const string BtceCommandTrade = "Trade";
         public const string BtceCommandActiveOrders = "ActiveOrders";
         public const string BtceCommandAccountInfo = "getInfo";
+        public const string BtceCommandUpdateDepth = "UpdateDepth";
 
         private readonly IRequestInputQueue requestInputQueue;
         private IWebRequestWrapper webRequest { get; set; }
@@ -91,6 +92,14 @@ namespace BTCE_Trader.Api
             requestInputQueue.AddItemToQueue(new InputQueueItem
             {
                 MethodName = BtceCommandAccountInfo,
+                MethodParameters = new Dictionary<string, string>()
+            });
+        }
+        public void UpdateDepth()
+        {
+            requestInputQueue.AddItemToQueue(new InputQueueItem
+            {
+                MethodName = BtceCommandUpdateDepth,
                 MethodParameters = new Dictionary<string, string>()
             });
         }

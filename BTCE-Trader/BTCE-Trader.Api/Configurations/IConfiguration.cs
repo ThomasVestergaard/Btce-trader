@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BTCE_Trader.Api.Configurations
 {
@@ -10,5 +6,8 @@ namespace BTCE_Trader.Api.Configurations
     {
         string PublicKey { get; }
         string SecretKey { get; }
+        List<BtcePairEnum> Pairs { get; }
+
+        Dictionary<BtcePairEnum, decimal> PairAggregatorIncrement { get; set; }
     }
 }

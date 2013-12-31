@@ -11,6 +11,7 @@ namespace BTCE_Trader.Api
         ltc_usd,
         ltc_rur,
         nmc_btc,
+        nmc_usd,
         nvc_btc,
         usd_rur,
         eur_usd,
@@ -25,7 +26,11 @@ namespace BTCE_Trader.Api
         public static BtcePairEnum FromString(string s)
         {
             BtcePairEnum ret = BtcePairEnum.Unknown;
-            Enum.TryParse<BtcePairEnum>(s.ToLowerInvariant(), out ret);
+            
+            if (!Enum.TryParse<BtcePairEnum>(s.ToLowerInvariant(), out ret))
+                throw new InvalidOperationException(string.Format("Cannot parse {0} to BtcePairEnum", s));
+            
+            
             return ret;
         }
         public static string ToString(BtcePairEnum v)

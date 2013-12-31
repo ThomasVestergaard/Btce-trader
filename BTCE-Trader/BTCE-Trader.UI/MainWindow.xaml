@@ -21,7 +21,7 @@
         
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <UI:MarketDepth Pair="ltc_btc" DataContext="{Binding DepthViewModel}" />
-            <UI:AccountInfo DataContext="{Binding AccountInfoViewModel}" />
+            <UI:AccountInfo Width="200" DataContext="{Binding AccountInfoViewModel}" />
         </StackPanel>
         
 

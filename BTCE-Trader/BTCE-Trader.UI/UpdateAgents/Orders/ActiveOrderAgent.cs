@@ -10,9 +10,6 @@ namespace BTCE_Trader.UI.UpdateAgents.Orders
     {
         private readonly IBtceModels btceModels;
 
-        public delegate void ActiveOrdersUpdatedDelegate(List<IOrder> activeOrders);
-        public event ActiveOrdersUpdatedDelegate ActiveOrdersUpdated;
-
         private Thread workerThread { get; set; }
         private int updateInterval { get; set; }
         private IBtceTradeApi btceApi { get; set; }
@@ -65,10 +62,6 @@ namespace BTCE_Trader.UI.UpdateAgents.Orders
             workerThread.Join();
         }
 
-        private void RaiseActiveUpdatedEvent(List<IOrder> activeOrders)
-        {
-            if (ActiveOrdersUpdated != null)
-                ActiveOrdersUpdated(activeOrders);
-        }
+        
     }
 }

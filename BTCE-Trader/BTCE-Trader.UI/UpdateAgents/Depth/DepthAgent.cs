@@ -1,32 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using BTCE_Trader.Api;
-using BTCE_Trader.Api.Depth;
 
 namespace BTCE_Trader.UI.UpdateAgents.Depth
 {
     public class DepthAgent : IDepthAgent
     {
         private readonly IBtceTradeApi btceTradeApi;
-
-        public delegate void DepthUpdatedDelegate(Dictionary<BtcePairEnum, IMarketDepth> pairDepthPairs);
-        public event DepthUpdatedDelegate DepthUpdated;
+        private readonly IBtceModels btceModels;
 
         private Thread workerThread { get; set; }
         private int updateInterval { get; set; }
-        private List<BtcePairEnum> pairs { get; set; }
         private bool isRunning { get; set; }
+        private bool hasReceivedLastRequst { get; set; }
+        private DateTime lastRequestTime { get; set; }
 
-        public DepthAgent(IBtceTradeApi btceTradeApi)
+        public DepthAgent(IBtceTradeApi btceTradeApi, IBtceModels btceModels)
         {
+            lastRequestTime = DateTime.Now.AddSeconds(-10);
+            hasReceivedLastRequst = true;
             this.btceTradeApi = btceTradeApi;
+            this.btceModels = btceModels;
+            this.btceModels.DepthUpdated += btceModels_DepthUpdated;
         }
 
-        public void Start(int updateInterval, List<BtcePairEnum> pairs)
+        void btceModels_DepthUpdated(object sender, EventArgs e)
+        {
+            hasReceivedLastRequst = true;
+        }
+
+        public void Start(int updateInterval)
         {
             this.updateInterval = updateInterval;
-            this.pairs = pairs;
             isRunning = true;
+            
             workerThread = new Thread(DoWork);
             workerThread.Start();
         }
@@ -35,11 +43,16 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
         {
             while (isRunning)
             {
-                var depth = btceTradeApi.GetMarketDepths(pairs);
-                if (depth != null)
-                    RaiseDepthUpdatedEvent(depth);
+                var timeCheck = (DateTime.Now - lastRequestTime);
+                if (hasReceivedLastRequst && timeCheck.TotalMilliseconds >= updateInterval)
+                {
+                    Console.WriteLine("Sending update depth request");
+                    btceTradeApi.UpdateDepth();
+                    lastRequestTime = DateTime.Now;
+                    hasReceivedLastRequst = false;
+                }
 
-                Thread.Sleep(updateInterval);
+                Thread.Sleep(10);
             }
         }
 
@@ -49,11 +62,6 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
             workerThread.Join();
         }
 
-        private void RaiseDepthUpdatedEvent(Dictionary<BtcePairEnum, IMarketDepth> pairDepthPairs)
-        {
-            if (DepthUpdated != null)
-                DepthUpdated(pairDepthPairs);
-        }
 
     }
 }

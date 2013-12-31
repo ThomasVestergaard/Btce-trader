@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using BTCE_Trader.Api.Annotations;
+using BTCE_Trader.Api.Configurations;
+using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Info;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.RequestQueue;
@@ -14,8 +16,10 @@ namespace BTCE_Trader.Api
 {
     public class BtceModels : IBtceModels, INotifyPropertyChanged
     {
+        private readonly IConfiguration configuration;
         public event EventHandler AccountInfoUpdated;
         public event EventHandler ActiveOrdersUpdated;
+        public event EventHandler DepthUpdated;
 
         private IAccountInfo accountInfo;
         public IAccountInfo AccountInfo
@@ -25,13 +29,21 @@ namespace BTCE_Trader.Api
         
         public List<IOrder> ActiveOrders { get; set; }
 
+        private Dictionary<BtcePairEnum, IMarketDepth> marketDepths;
+        public Dictionary<BtcePairEnum, IMarketDepth> MarketDepths
+        {
+            get { return marketDepths; }
+        }
+
         public ObservableCollection<ApiMessage> ApiMessages { get; set; }
 
-        public BtceModels()
+        public BtceModels(IConfiguration configuration)
         {
+            this.configuration = configuration;
             accountInfo = new AccountInfo();
             ApiMessages = new ObservableCollection<ApiMessage>();
             ActiveOrders = new List<IOrder>();
+            marketDepths = new Dictionary<BtcePairEnum, IMarketDepth>();
         }
 
         public void OnNext(OutputQueueItem data, long sequence, bool endOfBatch)
@@ -44,6 +56,10 @@ namespace BTCE_Trader.Api
 
                 case BtceTradeApi.BtceCommandActiveOrders:
                     HandleActiveOrdersCallBack(data.WebResult);
+                    break;
+
+                case BtceTradeApi.BtceCommandUpdateDepth :
+                    HandleDepthCallBack(data.WebResult);
                     break;
 
                 default:
@@ -138,7 +154,7 @@ namespace BTCE_Trader.Api
                 LogApiMessage("Error", string.Format("Error while handling AccountInfo message. {0}", webResult["error"].Value<string>()));
                 handleMessage = false;
             }
-
+            
             var newList = new List<IOrder>();
             if (handleMessage)
             {
@@ -158,6 +174,29 @@ namespace BTCE_Trader.Api
                 }
             }
 
+            /*
+            ActiveOrders.Add(new Order
+                {
+                    Amount = 1,
+                    CreateDate = DateTime.Now,
+                    Id = "DEMOBuy",
+                    Pair = BtcePairEnum.nmc_usd,
+                    Rate = 4.88m,
+                    Type = TradeTypeEnum.Buy,
+                    Status = 1
+                });
+
+            ActiveOrders.Add(new Order
+            {
+                Amount = 1,
+                CreateDate = DateTime.Now,
+                Id = "DEMOSell",
+                Pair = BtcePairEnum.nmc_usd,
+                Rate = 4.956m,
+                Type = TradeTypeEnum.Sell,
+                Status = 1
+            });*/
+
             ActiveOrders = newList;
             OnPropertyChanged("ActiveOrders");
 
@@ -165,6 +204,46 @@ namespace BTCE_Trader.Api
                 ActiveOrdersUpdated(this, null);
 
             LogApiMessage("Api message processed", "Active orders updated");
+        }
+
+        private void HandleDepthCallBack(string result)
+        {   
+            var webResult = JObject.Parse(result);
+            bool handleMessage = true;
+            
+            if (handleMessage)
+            {
+                marketDepths.Clear();
+                foreach (var pair in configuration.Pairs)
+                {
+                    marketDepths.Add(pair, new MarketDepth());
+
+                    decimal askAcc = 0;
+                    foreach (var ask in webResult[BtcePairHelper.ToString(pair)]["asks"])
+                    {
+                        var price = ask[0].Value<decimal>();
+                        var amount = ask[1].Value<decimal>();
+                        askAcc += amount;
+                        marketDepths[pair].Asks.Add(new DepthOrderInfo { Amount = amount, Price = price, AccumulatedAmount = askAcc});
+                    }
+
+                    decimal bidAcc = 0;
+                    foreach (var bid in webResult[BtcePairHelper.ToString(pair)]["bids"])
+                    {
+                        var price = bid[0].Value<decimal>();
+                        var amount = bid[1].Value<decimal>();
+                        bidAcc += amount;
+                        marketDepths[pair].Bids.Add(new DepthOrderInfo { Amount = amount, Price = price, AccumulatedAmount = bidAcc});
+                    }
+                }
+            }
+
+            OnPropertyChanged("MarketDepths");
+
+            if (DepthUpdated != null)
+                DepthUpdated(this, null);
+
+            LogApiMessage("Api message processed", "Market depths updated");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

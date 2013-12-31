@@ -6,22 +6,18 @@ using BTCE_Trader.Api;
 using BTCE_Trader.Api.Orders;
 using System.Linq;
 using BTCE_Trader.UI.Commons;
-using IActiveOrderAgent = BTCE_Trader.UI.UpdateAgents.Orders.IActiveOrderAgent;
-
 
 namespace BTCE_Trader.UI.UI.UserControls
 {
     public class ActiveOrdersViewModel : BaseViewModel
     {
-        private readonly IActiveOrderAgent activeOrderAgent;
         private readonly IBtceTradeApi tradeApi;
         private readonly IBtceModels btceModels;
         public ObservableCollection<IOrder> ActiveOrders { get; set; }
         public ICommand CancelOrderCommand { get; set; }
 
-        public ActiveOrdersViewModel(IActiveOrderAgent activeOrderAgent, IBtceTradeApi tradeApi, IBtceModels btceModels)
+        public ActiveOrdersViewModel(IBtceTradeApi tradeApi, IBtceModels btceModels)
         {
-            this.activeOrderAgent = activeOrderAgent;
             this.tradeApi = tradeApi;
             this.btceModels = btceModels;
             this.btceModels.ActiveOrdersUpdated += btceModels_ActiveOrdersUpdated;

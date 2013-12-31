@@ -4,5 +4,8 @@
     {
         public decimal Price { get; set; }
         public decimal Amount { get; set; }
+        public decimal AccumulatedAmount { get; set; }
+        public string ActiveOrder { get; set; }
+
     }
 }

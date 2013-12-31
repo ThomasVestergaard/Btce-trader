@@ -1,41 +1,33 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
 using BTCE_Trader.Api;
+using BTCE_Trader.Api.Configurations;
 using BTCE_Trader.Api.Depth;
-using BTCE_Trader.UI.Annotations;
+using BTCE_Trader.Api.Trade;
+using BTCE_Trader.UI.Commons;
+using BTCE_Trader.UI.UI.Dialogs;
 using BTCE_Trader.UI.UpdateAgents.Depth;
-using DepthHelper = BTCE_Trader.UI.UpdateAgents.Depth.DepthHelper;
+
 
 namespace BTCE_Trader.UI.UI.UserControls
 {
-    public class MarketDepthViewModel : INotifyPropertyChanged
+    public class MarketDepthViewModel : BaseViewModel
     {
-        private readonly IDepthAgent depthUpdater;
-        private List<IDepthOrderInfo> asks;
-        private List<IDepthOrderInfo> bids;
+        public BtcePairEnum CurrentPair { get; set; }
+        private readonly IBtceModels btceModels;
+        private readonly IConfiguration configuration;
+        private readonly IBtceTradeApi btceTradeApi;
 
-        public List<IDepthOrderInfo> Asks
-        {
-            get { return asks; }
-        }
-        public List<IDepthOrderInfo> Bids
-        {
-            get { return bids; }
-        }
+        public List<IDepthOrderInfo> Asks { get; set; }
+        public List<IDepthOrderInfo> Bids { get; set; }
 
-        private List<IDepthOrderInfo> aggregatedAsks;
-        private List<IDepthOrderInfo> aggregatedBids;
+        public List<IDepthOrderInfo> AggregatedAsks { get; set; }
+        public List<IDepthOrderInfo> AggregatedBids { get; set; }
 
-        public List<IDepthOrderInfo> AggregatedAsks
-        {
-            get { return aggregatedAsks; }
-        }
-        public List<IDepthOrderInfo> AggregatedBids
-        {
-            get { return aggregatedBids; }
-        }
+        public ICommand AskDoubbleClickCommand { get; set; }
+        public ICommand BidsDoubbleClickCommand { get; set; }
 
         private decimal spread { get; set; }
         public string Spread
@@ -46,46 +38,92 @@ namespace BTCE_Trader.UI.UI.UserControls
             }
         }
 
-        public MarketDepthViewModel(IDepthAgent depthUpdater)
+        public MarketDepthViewModel(IBtceModels btceModels, IConfiguration configuration, IBtceTradeApi btceTradeApi)
         {
-            asks = new List<IDepthOrderInfo>();
-            bids = new List<IDepthOrderInfo>();
-            aggregatedAsks = new List<IDepthOrderInfo>();
-            aggregatedBids = new List<IDepthOrderInfo>();
+            this.btceModels = btceModels;
+            this.configuration = configuration;
+            this.btceTradeApi = btceTradeApi;
+            this.CurrentPair = BtcePairEnum.nmc_usd;
 
-            this.depthUpdater = depthUpdater;
-            this.depthUpdater.DepthUpdated += depthUpdater_DepthUpdated;
+            AggregatedAsks = new List<IDepthOrderInfo>();
+            AggregatedBids = new List<IDepthOrderInfo>();
+            Asks = new List<IDepthOrderInfo>();
+            Bids = new List<IDepthOrderInfo>();
+
+            btceModels.DepthUpdated += btceModels_DepthUpdated;
+
+            AskDoubbleClickCommand = new RelayCommand((tradeClickParameters) =>
+                {
+                    ShowTradeWindow(((IDepthOrderInfo)tradeClickParameters).Price, TradeTypeEnum.Sell);
+                });
+
+            BidsDoubbleClickCommand = new RelayCommand((tradeClickParameters) =>
+            {
+                ShowTradeWindow(((IDepthOrderInfo)tradeClickParameters).Price, TradeTypeEnum.Buy);
+            });
         }
 
-        void depthUpdater_DepthUpdated(Dictionary<BtcePairEnum, IMarketDepth> pairDepthPairs)
+        private void ShowTradeWindow(decimal price, TradeTypeEnum way)
         {
-            if (!pairDepthPairs.ContainsKey(BtcePairEnum.ltc_btc))
-                return;
+            ITradeRequest sellTrade = new TradeRequest
+            {
+                Amount = 1,
+                Pair = CurrentPair,
+                Rate = price,
+                TradeType = way
+            };
 
-            var depth = pairDepthPairs[BtcePairEnum.ltc_btc];
+            var editTradeViewModel = new EditTradeViewModel(sellTrade);
+            var editTradeView = new EditTrade();
+            editTradeView.DataContext = editTradeViewModel;
 
-            asks = depth.Asks.OrderBy(a => a.Price).Take(10).OrderByDescending(a => a.Price).ToList();
-            bids = depth.Bids.OrderByDescending(a => a.Price).Take(10).ToList();
+            editTradeViewModel.CancelCommand = new RelayCommand((parameters) =>
+            {
+                editTradeView.Close();
+            });
 
-            aggregatedAsks = DepthHelper.GetAggregatedAskOrderList(depth.Asks, 0.0001m).OrderByDescending(a => a.Price).ToList();
-            aggregatedBids = DepthHelper.GetAggregatedBidOrderList(depth.Bids, 0.0001m).OrderByDescending(a => a.Price).ToList();
+            editTradeViewModel.OkCommand = new RelayCommand((parameters) =>
+            {
+                btceTradeApi.MakeTrade(editTradeViewModel.TradeRequest);
+                editTradeView.Close();
+            });
 
-            spread = asks[asks.Count - 1].Price - bids[0].Price;
 
-            OnPropertyChanged("Bids");
-            OnPropertyChanged("Asks");
-            OnPropertyChanged("AggregatedAsks");
-            OnPropertyChanged("AggregatedBids");
-            OnPropertyChanged("Spread");
+            editTradeView.ShowDialog();
+
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        void btceModels_DepthUpdated(object sender, System.EventArgs e)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            UiThread.UiDispatcher.Invoke(() =>
+            {
+                Asks = btceModels.MarketDepths[CurrentPair].Asks.OrderBy(a => a.Price).Take(20).OrderByDescending(a => a.Price).ToList();
+                Bids = btceModels.MarketDepths[CurrentPair].Bids.OrderByDescending(a => a.Price).Take(20).ToList();
+
+                AggregatedAsks = DepthHelper.GetAggregatedAskOrderList(btceModels.MarketDepths[CurrentPair].Asks, configuration.PairAggregatorIncrement[CurrentPair]).OrderByDescending(a => a.Price).ToList();
+                AggregatedBids = DepthHelper.GetAggregatedBidOrderList(btceModels.MarketDepths[CurrentPair].Bids, configuration.PairAggregatorIncrement[CurrentPair]).OrderByDescending(a => a.Price).ToList();
+
+                foreach (var order in btceModels.ActiveOrders.FindAll(a => a.Pair == CurrentPair && a.Type == TradeTypeEnum.Sell))
+                {
+                    var ask = Asks.Find(a => a.Price == order.Rate);
+                    if (ask != null)
+                        ask.ActiveOrder = string.Format("Sell {0}", order.Amount);
+                }
+
+                foreach (var order in btceModels.ActiveOrders.FindAll(a => a.Pair == CurrentPair && a.Type == TradeTypeEnum.Buy))
+                {
+                    var bid = Bids.Find(a => a.Price == order.Rate);
+                    if (bid != null)
+                        bid.ActiveOrder = string.Format("Buy {0}", order.Amount);
+                }
+
+                spread = Asks[Asks.Count - 1].Price - Bids[0].Price;
+                OnPropertyChanged("Asks");
+                OnPropertyChanged("Bids");
+                OnPropertyChanged("AggregatedAsks");
+                OnPropertyChanged("AggregatedBids");
+                OnPropertyChanged("Spread");
+            });
         }
     }
 }

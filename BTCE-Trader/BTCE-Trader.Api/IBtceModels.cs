@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Info;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.RequestQueue;
@@ -12,7 +13,9 @@ namespace BTCE_Trader.Api
     {
         event EventHandler AccountInfoUpdated;
         event EventHandler ActiveOrdersUpdated;
+        event EventHandler DepthUpdated;
         ObservableCollection<ApiMessage> ApiMessages { get; set; }
+        Dictionary<BtcePairEnum, IMarketDepth> MarketDepths { get; }
         List<IOrder> ActiveOrders { get; }
         IAccountInfo AccountInfo { get; }
     }

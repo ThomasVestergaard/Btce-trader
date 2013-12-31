@@ -12,13 +12,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="0" ItemsSource="{Binding Asks}" AutoGenerateColumns="False" >
+        <DataGrid Grid.Row="0" ItemsSource="{Binding Asks}" IsReadOnly="True" IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False" >
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding AskDoubbleClickCommand}" CommandParameter="{Binding Asks/}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Price" Width="90" Binding="{Binding Price, StringFormat={}{0:n8}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="Height" Value="10" />
+                            <Setter Property="Height" Value="12" />
                             <Setter Property="FontSize" Value="10px" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -28,6 +31,28 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Acc." Width="120" Binding="{Binding AccumulatedAmount, StringFormat={}{0:n8}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Order" Width="120" Binding="{Binding ActiveOrder}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -36,12 +61,17 @@
 
         <TextBlock Grid.Row="1" Text="{Binding Spread}" Margin="20, 15" />
 
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Bids}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Bids}" IsReadOnly="True" IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding BidsDoubbleClickCommand}" CommandParameter="{Binding Bids/}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Price" Width="90" Binding="{Binding Price, StringFormat={}{0:n8}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -50,6 +80,28 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Acc." Width="120" Binding="{Binding AccumulatedAmount, StringFormat={}{0:n8}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Order" Width="120" Binding="{Binding ActiveOrder}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter Property="FontSize" Value="10px" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>

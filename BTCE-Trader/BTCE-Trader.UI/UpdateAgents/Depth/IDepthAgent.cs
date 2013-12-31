@@ -5,8 +5,7 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
 {
     public interface IDepthAgent
     {
-        void Start(int updateInterval, List<BtcePairEnum> pairs);
+        void Start(int updateInterval);
         void Stop();
-        event DepthAgent.DepthUpdatedDelegate DepthUpdated;
     }
 }
