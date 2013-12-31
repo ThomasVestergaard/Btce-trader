@@ -3,20 +3,6 @@ This project contains three sub projects:
 2. Async API wrapper for easy integration into every type of .NET application.
 3. C# WPF userinterface to handle trades through the API wrapper.
 
-API Example usage:
-   /*
-   App.config:
-   <appSettings>
-       <add key="btcePublicKey" value="Your public key"/>
-       <add key="btceSecretKey" value="Your secret key"/>
-   </appSettings>
-   */
-   
-   var webRequestWrapper = new WebRequestWrapper(new Configuration());
-   var api = new BtceTradeApi(webRequestWrapper);
-   var depth = api.GetMarketDepths(new List<BtcePairEnum> {BtcePairEnum.btc_usd, BtcePairEnum.ltc_usd});
-
-
 
 TODO:
 - Btce API. Support following:
@@ -40,7 +26,7 @@ TODO:
    - Display aggregated order depth (done)
    - Display active orders (done)
    - Cancel active orders (done)
-   - Place orders via order depth control
+   - Place orders via order depth control (done)
    - Show account info (done)
 
 External libraries used:
@@ -49,10 +35,12 @@ External libraries used:
    - NUnit for unit testing
    - Rhinomocks for mocking
    - Avalon dock for UI
+   - Disrupter-NET for cross thread message queue
+   - Log4Net for logging
 
 
 BTCE-TRADER - C# WPF TRADING PLATFORM
 =====================================
-Current version: 0.2a
+Current version: 0.8a
 
 The Btce-trader is a C# WPF project which wraps basic trading functionality for the btc-e exchange.
