@@ -67,15 +67,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AvalonDockSpecific\PanelStyleSelector.cs" />
+    <Compile Include="AvalonDockSpecific\PanesTemplateSelector.cs" />
     <Compile Include="Commons\RelayCommand.cs" />
     <Compile Include="Commons\UIThread.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="UI\AvalonDockDepthViewModel.cs" />
     <Compile Include="UI\BaseViewModel.cs" />
     <Compile Include="UI\Dialogs\EditTrade.xaml.cs">
       <DependentUpon>EditTrade.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Dialogs\EditTradeViewModel.cs" />
+    <Compile Include="UI\Dialogs\SelectPair.xaml.cs">
+      <DependentUpon>SelectPair.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Dialogs\SelectPairViewModel.cs" />
     <Compile Include="UI\UserControls\AccountInfo.xaml.cs">
       <DependentUpon>AccountInfo.xaml</DependentUpon>
     </Compile>
@@ -114,6 +121,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\Dialogs\EditTrade.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Dialogs\SelectPair.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -170,6 +181,9 @@
   <ItemGroup>
     <Resource Include="Images\Icons\16x16\accept.png" />
     <Resource Include="Images\Icons\16x16\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\32x32\add.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
