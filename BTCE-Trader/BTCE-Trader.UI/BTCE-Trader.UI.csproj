@@ -71,6 +71,9 @@
     <Compile Include="AvalonDockSpecific\PanesTemplateSelector.cs" />
     <Compile Include="Commons\RelayCommand.cs" />
     <Compile Include="Commons\UIThread.cs" />
+    <Compile Include="Configurations\DefaultTradingSize.cs" />
+    <Compile Include="Configurations\ITradingConfigurations.cs" />
+    <Compile Include="Configurations\TradingConfigurations.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UI\AvalonDockDepthViewModel.cs" />

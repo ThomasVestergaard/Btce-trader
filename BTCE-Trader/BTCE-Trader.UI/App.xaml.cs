@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading;
+using System.Windows;
 using BTCE_Trader.Api.RequestQueue;
 using BTCE_Trader.UI.Commons;
 using BTCE_Trader.UI.UpdateAgents.AccountInfo;

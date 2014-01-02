@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BTCE_Trader.UI.UI.Dialogs.EditTrade"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Edit trade" Height="247" Width="291" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Edit trade" Height="305" Width="291" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -18,15 +18,24 @@
                 <StackPanel Orientation="Vertical" Grid.Column="0">
                     <TextBlock Text="Pair:" Margin="10,10,0,0" />
                     <TextBlock Text="Way:" Margin="10,10,0,0" />
-                    <TextBlock Text="Rate:" Margin="10,10,0,0" />
-                    <TextBlock Text="Amount:" Margin="10,10,0,0" />
+                    <TextBlock Text="Rate:" Margin="10,18,0,0" />
+                    <TextBlock Text="Amount:" Margin="10,15,0,0" />
+                    <TextBlock Text="Current holdings:" Margin="10,15,0,0" />
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" Grid.Column="1" >
                     <TextBlock Text="{Binding TradeRequest.Pair}" Margin="10,10,0,0" />
                     <ComboBox ItemsSource="{Binding TradeWays}" SelectedItem="{Binding TradeRequest.TradeType}" Margin="10,10,0,0" />
-                    <TextBox  Margin="10,10,0,0" Text="{Binding TradeRequest.Rate}"/>
+                    
+                    <StackPanel Orientation="Horizontal" Width="120">
+                        <TextBox  Margin="10,10,0,0" Text="{Binding TradeRequest.Rate}" Width="70"/>
+                        <Button Margin="5,10,0,0" Content="^" Height="20" Command="{Binding RateTickUp}" />
+                        <Button Margin="5,10,0,0" Content="˅" Height="20" Command="{Binding RateTickDown}"/>
+                    </StackPanel>
+                    
                     <TextBox  Margin="10,10,0,0" Text="{Binding TradeRequest.Amount}"/>
+
+                    <TextBlock Text="{Binding CurrentHoldings}" Margin="10,10,0,0" />
                 </StackPanel>
             </Grid>
         </GroupBox>

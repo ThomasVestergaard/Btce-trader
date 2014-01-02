@@ -14,5 +14,7 @@
         decimal FtcAmount { get; set; }
         decimal XpmAmount { get; set; }
 
+        decimal GetAmountFromEnum(BtcePairEnum Pair);
+
     }
 }

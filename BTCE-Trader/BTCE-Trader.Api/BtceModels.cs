@@ -20,6 +20,7 @@ namespace BTCE_Trader.Api
         public event EventHandler AccountInfoUpdated;
         public event EventHandler ActiveOrdersUpdated;
         public event EventHandler DepthUpdated;
+        public event EventHandler ApiMessagesUpdates;
 
         private IAccountInfo accountInfo;
         public IAccountInfo AccountInfo
@@ -72,6 +73,10 @@ namespace BTCE_Trader.Api
         private void LogApiMessage(string messageType, string message)
         {
             ApiMessages.Add(new ApiMessage { Message = message, MessageType = messageType });
+            OnPropertyChanged("ApiMessages");
+            
+            if (ApiMessagesUpdates != null)
+                ApiMessagesUpdates(this, null);
         }
         
         private void HandleAccountInfoCallBack(string result)

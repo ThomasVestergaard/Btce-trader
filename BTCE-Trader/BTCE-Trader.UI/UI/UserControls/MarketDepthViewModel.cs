@@ -7,6 +7,7 @@ using BTCE_Trader.Api.Configurations;
 using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Trade;
 using BTCE_Trader.UI.Commons;
+using BTCE_Trader.UI.Configurations;
 using BTCE_Trader.UI.UI.Dialogs;
 using BTCE_Trader.UI.UpdateAgents.Depth;
 
@@ -19,6 +20,7 @@ namespace BTCE_Trader.UI.UI.UserControls
         private readonly IBtceModels btceModels;
         private readonly IConfiguration configuration;
         private readonly IBtceTradeApi btceTradeApi;
+        private readonly ITradingConfigurations tradingConfigurations;
 
         public List<IDepthOrderInfo> Asks { get; set; }
         public List<IDepthOrderInfo> Bids { get; set; }
@@ -38,11 +40,12 @@ namespace BTCE_Trader.UI.UI.UserControls
             }
         }
 
-        public MarketDepthViewModel(IBtceModels btceModels, IConfiguration configuration, IBtceTradeApi btceTradeApi)
+        public MarketDepthViewModel(IBtceModels btceModels, IConfiguration configuration, IBtceTradeApi btceTradeApi, ITradingConfigurations tradingConfigurations)
         {
             this.btceModels = btceModels;
             this.configuration = configuration;
             this.btceTradeApi = btceTradeApi;
+            this.tradingConfigurations = tradingConfigurations;
             this.CurrentPair = BtcePairEnum.nmc_usd;
 
             AggregatedAsks = new List<IDepthOrderInfo>();
@@ -73,7 +76,7 @@ namespace BTCE_Trader.UI.UI.UserControls
                 TradeType = way
             };
 
-            var editTradeViewModel = new EditTradeViewModel(sellTrade);
+            var editTradeViewModel = new EditTradeViewModel(sellTrade, tradingConfigurations, btceModels.AccountInfo);
             var editTradeView = new EditTrade();
             editTradeView.DataContext = editTradeViewModel;
 

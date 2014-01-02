@@ -21,7 +21,7 @@ namespace BTCE_Trader.Api.Web
         {
             get
             {
-                long seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer;
+                long seq = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + sequenceIncrementer + 10000;
                 sequenceIncrementer++;
                 return seq;
             }

@@ -13,5 +13,31 @@
         public decimal PpcAmount { get; set; }
         public decimal FtcAmount { get; set; }
         public decimal XpmAmount { get; set; }
+
+        public decimal GetAmountFromEnum(BtcePairEnum Pair)
+        {
+            switch (Pair)
+            {
+                case BtcePairEnum.ltc_usd:
+                    return LtcAmount;
+                    break;
+
+                case BtcePairEnum.nmc_usd:
+                    return NmcAmount;
+                    break;
+
+                case BtcePairEnum.btc_usd:
+                    return BtcAmount;
+                    break;
+
+                case BtcePairEnum.ftc_btc:
+                    return FtcAmount;
+                    break;
+
+                default:
+                    return 1;
+                    break;
+            }
+        }
     }
 }

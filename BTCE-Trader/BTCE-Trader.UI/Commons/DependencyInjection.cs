@@ -2,6 +2,7 @@
 using BTCE_Trader.Api.Configurations;
 using BTCE_Trader.Api.RequestQueue;
 using BTCE_Trader.Api.Web;
+using BTCE_Trader.UI.Configurations;
 using BTCE_Trader.UI.UpdateAgents.AccountInfo;
 using BTCE_Trader.UI.UpdateAgents.Depth;
 using BTCE_Trader.UI.UpdateAgents.Trade;
@@ -34,7 +35,8 @@ namespace BTCE_Trader.UI.Commons
             Container.Register(Component.For<IRequestOutputQueue>().ImplementedBy<RequestOutputQueue>().LifestyleSingleton());
             Container.Register(Component.For<IBtceModels>().ImplementedBy<BtceModels>().LifestyleSingleton());
             Container.Register(Component.For<MainWindowViewModel>().ImplementedBy<MainWindowViewModel>().LifestyleTransient());
-            
+            Container.Register(Component.For<ITradingConfigurations>().ImplementedBy<TradingConfigurations>().LifestyleTransient());
+
             outputEventHandlers = new IEventHandler<OutputQueueItem>[1];
             outputEventHandlers[0] = Container.Resolve<IBtceModels>();
             Container.Register(Component.For<IEventHandler<OutputQueueItem>[]>().Instance(outputEventHandlers));
