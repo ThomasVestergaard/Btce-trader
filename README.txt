@@ -15,19 +15,20 @@ TODO:
 
 - Async wrapper
    - Basic threaded agents for all API functions (done)
-   - Make queued webrequest wrapper due to btc-e's noonce security thingy (in progress)
+   - Make queued webrequest wrapper due to btc-e's noonce security thingy (done)
 
 
 - UI (C# WPF MVVM)
    - Display basic order depth (done)
    - Format order depth nicely (done)
    - Add main window with ribbon (done)
-   - Add avalon dock
+   - Add avalon dock (done)
    - Display aggregated order depth (done)
    - Display active orders (done)
    - Cancel active orders (done)
    - Place orders via order depth control (done)
    - Show account info (done)
+   - Add pair-specific default trading siezes 
 
 External libraries used:
    - Newtonsoft.Json for jSon serialization
