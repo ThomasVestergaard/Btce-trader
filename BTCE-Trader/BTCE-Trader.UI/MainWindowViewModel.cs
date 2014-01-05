@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Input;
 using BTCE_Trader.Api;
 using BTCE_Trader.Api.Configurations;
@@ -18,8 +17,7 @@ namespace BTCE_Trader.UI
         private readonly IBtceModels btceModels;
         private readonly IConfiguration configuration;
         private readonly ITradingConfigurations tradingConfigurations;
-
-        public MarketDepthViewModel DepthViewModel { get; set; }
+        
         public ActiveOrdersViewModel ActiveOrdersViewModel { get; set; }
         public AccountInfoViewModel AccountInfoViewModel { get; set; }
 
@@ -29,9 +27,10 @@ namespace BTCE_Trader.UI
         }
         public BtcePairEnum SelectedPair { get; set; }
 
-        public ObservableCollection<AvalonDockDepthViewModel> DepthViewModels { get; set; }
+        public ObservableCollection<IAvalonDockViewModel> DockedViewModels { get; set; }
 
         public ICommand AddDepthCommand { get; set; }
+        public ICommand AddMarketMakingOverview { get; set; }
 
         public MainWindowViewModel(IBtceTradeApi btceTradeApi, IBtceModels btceModels, IConfiguration configuration, ITradingConfigurations tradingConfigurations)
         {
@@ -40,9 +39,9 @@ namespace BTCE_Trader.UI
             this.configuration = configuration;
             this.tradingConfigurations = tradingConfigurations;
 
-            DepthViewModels = new ObservableCollection<AvalonDockDepthViewModel>();
+            DockedViewModels = new ObservableCollection<IAvalonDockViewModel>();
 
-            DepthViewModel = new MarketDepthViewModel(this.btceModels, this.configuration, btceTradeApi, tradingConfigurations);
+            
             ActiveOrdersViewModel = new ActiveOrdersViewModel(this.btceTradeApi, this.btceModels);
             AccountInfoViewModel = new AccountInfoViewModel(this.btceModels);
 
@@ -61,13 +60,19 @@ namespace BTCE_Trader.UI
                         {
                             if (viewModel.SelectedPair != null)
                             {
-                                DepthViewModels.Add(new AvalonDockDepthViewModel(viewModel.SelectedPair, btceModels, configuration, btceTradeApi, tradingConfigurations));
+                                var newMarketDepthViewModel = new MarketDepthViewModel(btceModels, configuration, btceTradeApi, tradingConfigurations, viewModel.SelectedPair);
+                                
+                                DockedViewModels.Add(newMarketDepthViewModel);
                                 view.Close();
                             }
                         });
 
                     view.ShowDialog();
                 });
+
+
+    
+
         }
     }
 }

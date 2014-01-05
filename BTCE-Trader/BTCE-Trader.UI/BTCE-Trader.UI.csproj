@@ -76,7 +76,6 @@
     <Compile Include="Configurations\TradingConfigurations.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="UI\AvalonDockDepthViewModel.cs" />
     <Compile Include="UI\BaseViewModel.cs" />
     <Compile Include="UI\Dialogs\EditTrade.xaml.cs">
       <DependentUpon>EditTrade.xaml</DependentUpon>
@@ -86,6 +85,7 @@
       <DependentUpon>SelectPair.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Dialogs\SelectPairViewModel.cs" />
+    <Compile Include="UI\IAvalonDockViewModel.cs" />
     <Compile Include="UI\UserControls\AccountInfo.xaml.cs">
       <DependentUpon>AccountInfo.xaml</DependentUpon>
     </Compile>
@@ -98,6 +98,15 @@
       <DependentUpon>MarketDepth.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UserControls\MarketDepthViewModel.cs" />
+    <Compile Include="UI\UserControls\MarketMaker\MarketMakerView.xaml.cs">
+      <DependentUpon>MarketMakerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\UserControls\MarketMaker\MarketMakerViewModel.cs" />
+    <Compile Include="UI\UserControls\MarketMaker\MarketMakingSituation.cs" />
+    <Compile Include="UI\UserControls\TradeTickerView.xaml.cs">
+      <DependentUpon>TradeTickerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\UserControls\TradeTickerViewModel.cs" />
     <Compile Include="UI\UserControls\WebPage.xaml.cs">
       <DependentUpon>WebPage.xaml</DependentUpon>
     </Compile>
@@ -106,6 +115,8 @@
     <Compile Include="UpdateAgents\Depth\DepthAgent.cs" />
     <Compile Include="UpdateAgents\Depth\DepthHelper.cs" />
     <Compile Include="UpdateAgents\Depth\IDepthAgent.cs" />
+    <Compile Include="UpdateAgents\MarketTrades\IMarketTradesAgent.cs" />
+    <Compile Include="UpdateAgents\MarketTrades\MarketTradesAgent.cs" />
     <Compile Include="UpdateAgents\Orders\ActiveOrderAgent.cs" />
     <Compile Include="UpdateAgents\Orders\IActiveOrderAgent.cs" />
     <Compile Include="UpdateAgents\Trade\ITradeAgent.cs" />
@@ -140,6 +151,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\UserControls\MarketDepth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\UserControls\MarketMaker\MarketMakerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\UserControls\TradeTickerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,6 +207,7 @@
   <ItemGroup>
     <Resource Include="Images\Icons\32x32\add.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

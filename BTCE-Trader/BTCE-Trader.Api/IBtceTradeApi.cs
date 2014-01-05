@@ -12,5 +12,6 @@ namespace BTCE_Trader.Api
         void GetAccountInfo();
         void MakeTrade(ITradeRequest tradeRequest);
         void UpdateDepth();
+        void UpdateMarketTrades();
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Threading;
 using System.Windows;
+using BTCE_Trader.Api;
 using BTCE_Trader.Api.RequestQueue;
 using BTCE_Trader.UI.Commons;
 using BTCE_Trader.UI.UpdateAgents.AccountInfo;
+using BTCE_Trader.UI.UpdateAgents.MarketTrades;
 using BTCE_Trader.UI.UpdateAgents.Orders;
 using BTCE_Trader.UI.UpdateAgents.Depth;
 
@@ -28,6 +30,9 @@ namespace BTCE_Trader.UI
             dependencyInjection.Container.Resolve<IDepthAgent>().Start(1000);
             dependencyInjection.Container.Resolve<IAccountInfoAgent>().Start(1000);
             dependencyInjection.Container.Resolve<IActiveOrderAgent>().Start(1000);
+            dependencyInjection.Container.Resolve<IMarketTradesAgent>().Start(1000);
+
+            dependencyInjection.Container.Resolve<IBtceTradeApi>().UpdateMarketTrades();
 
             Dispatcher.Invoke(Start);
         }
@@ -47,6 +52,7 @@ namespace BTCE_Trader.UI
             dependencyInjection.Container.Resolve<IDepthAgent>().Stop();
             dependencyInjection.Container.Resolve<IActiveOrderAgent>().Stop();
             dependencyInjection.Container.Resolve<IAccountInfoAgent>().Stop();
+            dependencyInjection.Container.Resolve<IMarketTradesAgent>().Stop();
         }
     }
 }

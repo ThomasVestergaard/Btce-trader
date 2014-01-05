@@ -2,9 +2,9 @@
 using System.Threading;
 using BTCE_Trader.Api;
 
-namespace BTCE_Trader.UI.UpdateAgents.Depth
+namespace BTCE_Trader.UI.UpdateAgents.MarketTrades
 {
-    public class DepthAgent : IDepthAgent
+    class MarketTradesAgent : IMarketTradesAgent
     {
         private readonly IBtceTradeApi btceTradeApi;
         private readonly IBtceModels btceModels;
@@ -15,16 +15,16 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
         private bool hasReceivedLastRequst { get; set; }
         private DateTime lastRequestTime { get; set; }
 
-        public DepthAgent(IBtceTradeApi btceTradeApi, IBtceModels btceModels)
+        public MarketTradesAgent(IBtceTradeApi btceTradeApi, IBtceModels btceModels)
         {
             lastRequestTime = DateTime.Now.AddSeconds(-10);
             hasReceivedLastRequst = true;
             this.btceTradeApi = btceTradeApi;
             this.btceModels = btceModels;
-            this.btceModels.DepthUpdated += btceModels_DepthUpdated;
+            this.btceModels.MarketTradesUpdated += btceModels_MarketTradesUpdated;
         }
 
-        void btceModels_DepthUpdated(object sender, EventArgs e)
+        void btceModels_MarketTradesUpdated(object sender, EventArgs e)
         {
             hasReceivedLastRequst = true;
         }
@@ -33,7 +33,7 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
         {
             this.updateInterval = updateInterval;
             isRunning = true;
-            
+
             workerThread = new Thread(DoWork);
             workerThread.Start();
         }
@@ -45,8 +45,8 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
                 var timeCheck = (DateTime.Now - lastRequestTime);
                 if (hasReceivedLastRequst && timeCheck.TotalMilliseconds >= updateInterval)
                 {
-                    Console.WriteLine("Sending update depth request");
-                    btceTradeApi.UpdateDepth();
+                    Console.WriteLine("Sending market trades request");
+                    btceTradeApi.UpdateMarketTrades();
                     lastRequestTime = DateTime.Now;
                     hasReceivedLastRequst = false;
                 }
@@ -60,7 +60,5 @@ namespace BTCE_Trader.UI.UpdateAgents.Depth
             isRunning = false;
             workerThread.Join();
         }
-
-
     }
 }

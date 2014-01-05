@@ -9,19 +9,20 @@ using BTCE_Trader.Api.Trade;
 using BTCE_Trader.UI.Commons;
 using BTCE_Trader.UI.Configurations;
 using BTCE_Trader.UI.UI.Dialogs;
+using BTCE_Trader.UI.UI.UserControls.MarketMaker;
 using BTCE_Trader.UI.UpdateAgents.Depth;
 
 
 namespace BTCE_Trader.UI.UI.UserControls
 {
-    public class MarketDepthViewModel : BaseViewModel
+    public class MarketDepthViewModel : BaseViewModel, IAvalonDockViewModel
     {
         public BtcePairEnum CurrentPair { get; set; }
         private readonly IBtceModels btceModels;
         private readonly IConfiguration configuration;
         private readonly IBtceTradeApi btceTradeApi;
         private readonly ITradingConfigurations tradingConfigurations;
-
+        
         public List<IDepthOrderInfo> Asks { get; set; }
         public List<IDepthOrderInfo> Bids { get; set; }
 
@@ -40,18 +41,34 @@ namespace BTCE_Trader.UI.UI.UserControls
             }
         }
 
-        public MarketDepthViewModel(IBtceModels btceModels, IConfiguration configuration, IBtceTradeApi btceTradeApi, ITradingConfigurations tradingConfigurations)
+        private string paneTitle;
+        public string PaneTitle
         {
+            get { return paneTitle; }
+        }
+
+        public object Model {
+            get { return this; }
+        }
+
+        public MarketMakerViewModel MarketMakerViewModel { get; set; }
+        public TradeTickerViewModel TradeTickerViewModel { get; set; }
+
+        public MarketDepthViewModel(IBtceModels btceModels, IConfiguration configuration, IBtceTradeApi btceTradeApi, ITradingConfigurations tradingConfigurations, BtcePairEnum pair)
+        {
+            this.CurrentPair = pair;
             this.btceModels = btceModels;
             this.configuration = configuration;
             this.btceTradeApi = btceTradeApi;
             this.tradingConfigurations = tradingConfigurations;
-            this.CurrentPair = BtcePairEnum.nmc_usd;
+            this.paneTitle = "Depth: " + CurrentPair.ToString();
 
             AggregatedAsks = new List<IDepthOrderInfo>();
             AggregatedBids = new List<IDepthOrderInfo>();
             Asks = new List<IDepthOrderInfo>();
             Bids = new List<IDepthOrderInfo>();
+            MarketMakerViewModel = new MarketMakerViewModel(CurrentPair, btceModels);
+            TradeTickerViewModel = new TradeTickerViewModel(btceModels, CurrentPair);
 
             btceModels.DepthUpdated += btceModels_DepthUpdated;
 
@@ -128,5 +145,7 @@ namespace BTCE_Trader.UI.UI.UserControls
                 OnPropertyChanged("Spread");
             });
         }
+
+        
     }
 }

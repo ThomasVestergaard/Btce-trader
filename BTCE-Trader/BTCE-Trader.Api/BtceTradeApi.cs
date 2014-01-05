@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.RequestQueue;
+using BTCE_Trader.Api.Time;
 using BTCE_Trader.Api.Trade;
 using BTCE_Trader.Api.Web;
 using Newtonsoft.Json.Linq;
@@ -15,6 +17,7 @@ namespace BTCE_Trader.Api
         public const string BtceCommandActiveOrders = "ActiveOrders";
         public const string BtceCommandAccountInfo = "getInfo";
         public const string BtceCommandUpdateDepth = "UpdateDepth";
+        public const string BtceCommandUpdateMarketTrades = "TradeHistory";
 
         private readonly IRequestInputQueue requestInputQueue;
         private IWebRequestWrapper webRequest { get; set; }
@@ -135,7 +138,25 @@ namespace BTCE_Trader.Api
 
             return toReturn;*/
         }
-
+        
+        public void UpdateMarketTrades()
+        {
+            var parmeters = new Dictionary<string, string>();
+            parmeters.Add("pair", "nmc_usd");
+            //parmeters.Add("from", "0");
+            //parmeters.Add("count", "100");
+            //parmeters.Add("from_id", "86606659");
+            //parmeters.Add("from_id", "86606500");
+            //parmeters.Add("end_id", "0"); 
+            parmeters.Add("order", "DESC");
+            //parmeters.Add("since", UnixTimeHelper.GetCurrentUnixTimeForDate(DateTime.Now.AddHours(-2)).ToString());
+            
+            requestInputQueue.AddItemToQueue(new InputQueueItem
+            {
+                MethodName = BtceCommandUpdateMarketTrades,
+                MethodParameters = parmeters
+            });
+        }
         
 
     }

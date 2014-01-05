@@ -26,6 +26,11 @@
                     <RibbonButton Label="Add market depth" LargeImageSource="pack://application:,,,/Images/Icons/32x32/add.png" Command="{Binding AddDepthCommand}" />
                 </RibbonGroup>
             </RibbonTab>
+            <RibbonTab Header="Trading">
+                <RibbonGroup Header="Market making">
+                    <RibbonButton Label="Overview" LargeImageSource="pack://application:,,,/Images/Icons/32x32/add.png" Command="{Binding AddMarketMakingOverview}" />
+                </RibbonGroup>
+            </RibbonTab>
         </Ribbon>
         
         <Grid Grid.Row="1">
@@ -35,7 +40,7 @@
             </Grid.ColumnDefinitions>
             <xcad:DockingManager x:Name="DockManager" 
                              Grid.Column="0"
-                             DocumentsSource="{Binding DepthViewModels}">
+                             DocumentsSource="{Binding DockedViewModels}">
 
                 <xcad:DockingManager.LayoutItemTemplateSelector>
                     <local:PanesTemplateSelector>

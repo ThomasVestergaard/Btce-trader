@@ -7,6 +7,7 @@ using BTCE_Trader.Api.Annotations;
 using BTCE_Trader.Api.Configurations;
 using BTCE_Trader.Api.Depth;
 using BTCE_Trader.Api.Info;
+using BTCE_Trader.Api.MarketTrades;
 using BTCE_Trader.Api.Orders;
 using BTCE_Trader.Api.RequestQueue;
 using BTCE_Trader.Api.Time;
@@ -20,7 +21,8 @@ namespace BTCE_Trader.Api
         public event EventHandler AccountInfoUpdated;
         public event EventHandler ActiveOrdersUpdated;
         public event EventHandler DepthUpdated;
-        public event EventHandler ApiMessagesUpdates;
+        public event EventHandler ApiMessagesUpdated;
+        public event EventHandler MarketTradesUpdated;
 
         private IAccountInfo accountInfo;
         public IAccountInfo AccountInfo
@@ -29,7 +31,7 @@ namespace BTCE_Trader.Api
         }
         
         public List<IOrder> ActiveOrders { get; set; }
-
+        public Dictionary<BtcePairEnum, List<IMarketTrade>> PairTrades { get; set; }
         private Dictionary<BtcePairEnum, IMarketDepth> marketDepths;
         public Dictionary<BtcePairEnum, IMarketDepth> MarketDepths
         {
@@ -45,6 +47,7 @@ namespace BTCE_Trader.Api
             ApiMessages = new ObservableCollection<ApiMessage>();
             ActiveOrders = new List<IOrder>();
             marketDepths = new Dictionary<BtcePairEnum, IMarketDepth>();
+            PairTrades = new Dictionary<BtcePairEnum, List<IMarketTrade>>();
         }
 
         public void OnNext(OutputQueueItem data, long sequence, bool endOfBatch)
@@ -63,6 +66,10 @@ namespace BTCE_Trader.Api
                     HandleDepthCallBack(data.WebResult);
                     break;
 
+                case BtceTradeApi.BtceCommandUpdateMarketTrades:
+                    HandleTradesCallBack(data.WebResult);
+                    break;
+
                 default:
                     break;
             }
@@ -75,8 +82,8 @@ namespace BTCE_Trader.Api
             ApiMessages.Add(new ApiMessage { Message = message, MessageType = messageType });
             OnPropertyChanged("ApiMessages");
             
-            if (ApiMessagesUpdates != null)
-                ApiMessagesUpdates(this, null);
+            if (ApiMessagesUpdated != null)
+                ApiMessagesUpdated(this, null);
         }
         
         private void HandleAccountInfoCallBack(string result)
@@ -249,6 +256,60 @@ namespace BTCE_Trader.Api
                 DepthUpdated(this, null);
 
             LogApiMessage("Api message processed", "Market depths updated");
+        }
+
+        private void HandleTradesCallBack(string result)
+        {
+            var webResult = JObject.Parse(result);
+            
+            foreach (var pair in configuration.Pairs)
+            {
+                if (!PairTrades.ContainsKey(pair))
+                    PairTrades.Add(pair, new List<IMarketTrade>());
+
+                foreach (var trade in webResult[BtcePairHelper.ToString(pair)])
+                {
+                    var newTrade = new MarketTrade
+                    {
+                        Pair = pair,
+                        TradeId = trade["tid"].Value<int>(),
+                        Amount = trade["amount"].Value<decimal>(),
+                        Rate = trade["price"].Value<decimal>(),
+                        Timestamp = UnixTimeHelper.UnixTimeToDateTime(trade["timestamp"].Value<UInt32>())
+                    };
+
+                    if (PairTrades[pair].Find(a => a.TradeId == newTrade.TradeId) == null)
+                        PairTrades[pair].Add(newTrade);
+                }
+            }
+            /*
+            foreach (var tradeItem in webResult["return"].Value<JObject>())
+                {
+                    var newTrade = new MarketTrade
+                        {
+                            Pair =  BtcePairHelper.FromString(tradeItem.Value["pair"].Value<string>()),
+                            TradeType = TradeTypeHelper.FromString(tradeItem.Value["type"].Value<string>()),
+                            Amount = tradeItem.Value["amount"].Value<decimal>(),
+                            Rate = tradeItem.Value["rate"].Value<decimal>(),
+                            OrderId = tradeItem.Value["order_id"].Value<int>(),
+                            YourOrder = tradeItem.Value["is_your_order"].Value<string>(),
+                            TimeStamp = UnixTimeHelper.UnixTimeToDateTime(tradeItem.Value["timestamp"].Value<UInt32>())
+                        };
+
+                    if (!PairTrades.ContainsKey(newTrade.Pair))
+                        PairTrades.Add(newTrade.Pair, new List<IMarketTrade>());
+
+                    if (PairTrades[newTrade.Pair].Find(a => a.OrderId == newTrade.OrderId) == null)
+                        PairTrades[newTrade.Pair].Add(newTrade);
+                }*/
+            
+
+            OnPropertyChanged("PairTrades");
+
+            if (MarketTradesUpdated != null)
+                MarketTradesUpdated(this, null);
+
+            LogApiMessage("Api message processed", "Market trades updated");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

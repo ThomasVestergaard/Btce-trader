@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="BTCE_Trader.UI.UI.UserControls.TradeTickerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+            <DataGrid ItemsSource="{Binding Trades}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" Width="90" Binding="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}" />
+                <DataGridTextColumn Header="Price" Width="90" Binding="{Binding Rate, StringFormat={}{0:n3}}" />
+                <DataGridTextColumn Header="Amount" Width="90" Binding="{Binding Amount, StringFormat={}{0:n3}}" />
+            </DataGrid.Columns>
+                
+            </DataGrid>
+    </Grid>
+</UserControl>

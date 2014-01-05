@@ -24,22 +24,38 @@ namespace BTCE_Trader.Api.Web
             try
             {
                 string webResult = string.Empty;
-
+                string parameters = "";
+                int counter = 0;
                 switch (data.MethodName)
                 {
                     case BtceTradeApi.BtceCommandUpdateDepth:
-                        string parameters = "";
-                        int c = 0;
+
+                        counter = 0;
                         foreach (var pair in configuration.Pairs)
                         {
                             parameters += pair.ToString();
-                            if (c < configuration.Pairs.Count - 1)
+                            if (counter < configuration.Pairs.Count - 1)
                                 parameters += "-";
 
-                            c++;
+                            counter++;
                         }
 
                         webResult = webRequestWrapper.RequestV3("depth", parameters);
+                        break;
+
+                    case BtceTradeApi.BtceCommandUpdateMarketTrades:
+                        
+                        counter = 0;
+                        foreach (var pair in configuration.Pairs)
+                        {
+                            parameters += pair.ToString();
+                            if (counter < configuration.Pairs.Count - 1)
+                                parameters += "-";
+
+                            counter++;
+                        }
+                        webResult = webRequestWrapper.RequestV3("trades", parameters);
+                        //webResult = webRequestWrapper.RequestData(data.MethodName, data.MethodParameters);
                         break;
 
                     default:

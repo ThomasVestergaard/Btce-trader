@@ -69,6 +69,8 @@
     <Compile Include="IBtceTradeApi.cs" />
     <Compile Include="Info\AccountInfo.cs" />
     <Compile Include="Info\IAccountInfo.cs" />
+    <Compile Include="MarketTrades\IMarketTrade.cs" />
+    <Compile Include="MarketTrades\MarketTrade.cs" />
     <Compile Include="Orders\IOrder.cs" />
     <Compile Include="Orders\Order.cs" />
     <Compile Include="Properties\Annotations.cs" />

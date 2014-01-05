@@ -5,6 +5,7 @@ using BTCE_Trader.Api.Web;
 using BTCE_Trader.UI.Configurations;
 using BTCE_Trader.UI.UpdateAgents.AccountInfo;
 using BTCE_Trader.UI.UpdateAgents.Depth;
+using BTCE_Trader.UI.UpdateAgents.MarketTrades;
 using BTCE_Trader.UI.UpdateAgents.Trade;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -26,6 +27,7 @@ namespace BTCE_Trader.UI.Commons
             Container.Register(Component.For<IDepthAgent>().ImplementedBy<DepthAgent>().LifestyleSingleton());
             Container.Register(Component.For<IActiveOrderAgent>().ImplementedBy<ActiveOrderAgent>().LifestyleSingleton());
             Container.Register(Component.For<IAccountInfoAgent>().ImplementedBy<AccountInfoAgent>().LifestyleSingleton());
+            Container.Register(Component.For<IMarketTradesAgent>().ImplementedBy<MarketTradesAgent>().LifestyleSingleton());
             Container.Register(Component.For<IBtceTradeApi>().ImplementedBy<BtceTradeApi>().LifestyleSingleton());
             Container.Register(Component.For<IConfiguration>().ImplementedBy<Configuration>().LifestyleSingleton());
             Container.Register(Component.For<ITradeAgent>().ImplementedBy<TradeAgent>().LifestyleSingleton());
