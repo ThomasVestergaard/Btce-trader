@@ -28,7 +28,7 @@ TODO:
    - Cancel active orders (done)
    - Place orders via order depth control (done)
    - Show account info (done)
-   - Add pair-specific default trading siezes 
+   - Add pair-specific default trading siezes (done - but not configurable yet)
 
 External libraries used:
    - Newtonsoft.Json for jSon serialization
