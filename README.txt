@@ -8,7 +8,7 @@ TODO:
 - Btce API. Support following:
    - Get active order. (done)
    - Get depth on pairs (done)
-   - Get latest trades on pairs
+   - Get latest trades on pairs (done)
    - Post order on exchange (done)
    - Cancel active order (done)
    - Get account info (done)
@@ -28,7 +28,8 @@ TODO:
    - Cancel active orders (done)
    - Place orders via order depth control (done)
    - Show account info (done)
-   - Add pair-specific default trading siezes (done - but not configurable yet)
+   - Add pair-specific default trading siezes (done - but not configurable though UI yet)
+   - Add trade ticker next to depth view (done)
 
 External libraries used:
    - Newtonsoft.Json for jSon serialization
